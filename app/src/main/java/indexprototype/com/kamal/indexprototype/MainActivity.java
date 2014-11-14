@@ -1,29 +1,15 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.content.Context;
-import android.content.Intent;
-import android.speech.RecognizerIntent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.TestingStoryReader;
 import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
 
@@ -42,15 +28,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-
-        storiesCreater = new StoriesCreater(this);
-        try {
-            storiesCreater.readFileForStories();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        TestingStoryReader.run();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 

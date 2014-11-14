@@ -13,10 +13,7 @@ import indexprototype.com.kamal.indexprototype.StoriesBank;
 
 public class TestingStoryReader {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public static void run() {
 		Document doc = null;
 		String url = "http://www.thekzooindex.com/";
 		try {
