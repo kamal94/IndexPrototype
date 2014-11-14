@@ -14,13 +14,26 @@ public class Story {
     private String content;
     private String author;
     private int orderNumber;
+    private String mImageURL;
 
-    public Story(String Author, String Title, String Content, int orderNo){
-        title = Title;
-        author = Author;
+    public Story(String Author, String Title, String Content, String imageURL){
+        if(Title!=null)
+            title = Title.trim();
+        else
+            title = "No title";
+        if(Author!=null)
+            author = Author.trim();
+        else
+            author = "No author";
         ID = UUID.randomUUID();
-        content = Content;
-        orderNumber = orderNo;
+        if(Content!=null)
+            content = Content.trim();
+        else
+            content = "No content";
+        if(imageURL!=null)
+            mImageURL = imageURL;
+        else
+            mImageURL = "No Image";
     }
 
 
@@ -36,4 +49,17 @@ public class Story {
         return ID;
     }
 
+    public boolean hasContent(){
+        return (!content.trim().equals(""));
+    }
+
+    public String toString(){
+        String string = "";
+        string += "title: " +title + "\n";
+        string += "author: " + author + "\n";
+        string += "Image: " + mImageURL + "\n";
+        string += "content: " + content + "\n";
+
+        return string;
+    }
 }

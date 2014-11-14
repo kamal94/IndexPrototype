@@ -1,7 +1,5 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
@@ -64,5 +62,15 @@ public class StoriesBank {
             count++;
         }
         return count;
+    }
+
+    /**
+     * Prints all the stories in the bank
+     */
+    public static void printStories(){
+        for(Story story: stories){
+            if (story.hasContent())
+                System.out.println(story.toString());
+        }
     }
 }

@@ -35,7 +35,7 @@ public class StoriesCreater {
     public void readFileForStories() throws IOException {
         resetBufferReader(context);
         try {
-            while( !( (nextLine =bufferedReader.readLine()) == null) && nextLine.trim()!=""){
+            while( !( (nextLine =bufferedReader.readLine()) == null) && !nextLine.trim().equals("")){
                 fileContent.append(nextLine + "\n" + "\t \t");
             }
         } catch (IOException e) {
@@ -55,14 +55,12 @@ public class StoriesCreater {
         String author = storyString.substring(1, storyString.indexOf("AUTHOR"));
         String title = storyString.substring(storyString.indexOf("..") + 2, storyString.indexOf( "TITLE"));
         String content = storyString.substring(storyString.indexOf("...")+ 3, storyString.length()-1);
-        StoriesBank.addStory(new Story(author, title, content + content, 0));
-        StoriesBank.addStory(new Story(author, title, content + content, 1));
-        StoriesBank.addStory(new Story(author, title, content + content, 0));
-        StoriesBank.addStory(new Story(author, title, content + content, 1));
-        StoriesBank.addStory(new Story(author, title, content + content, 0));
-        StoriesBank.addStory(new Story(author, title, content + content, 1));
-        StoriesBank.addStory(new Story(author, title, content + content, 0));
-        StoriesBank.addStory(new Story(author, title, content + content, 1));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
+        StoriesBank.addStory(new Story(author, title, content + content, ""));
     }
 
     /**
