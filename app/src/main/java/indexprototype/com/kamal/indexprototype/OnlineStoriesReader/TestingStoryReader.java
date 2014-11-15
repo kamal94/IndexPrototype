@@ -13,7 +13,7 @@ import indexprototype.com.kamal.indexprototype.StoriesBank;
 
 public class TestingStoryReader {
 
-	public static void run() {
+	public static boolean run() {
 		Document doc = null;
 		String url = "http://www.thekzooindex.com/";
 		try {
@@ -35,8 +35,10 @@ public class TestingStoryReader {
 				fetcher.addStory();
 			}
 		}
-		
-		StoriesBank.printStories();
+        if(StoriesBank.howMany()>0)
+		    return true;
+        else
+            return false;
 	}
 
 }
