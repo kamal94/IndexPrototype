@@ -1,5 +1,6 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import java.net.URL;
 
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.TestingStoryReader;
 import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
@@ -28,7 +31,15 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        TestingStoryReader.run();
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TestingStoryReader.run();
+                storyRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        }).start();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -81,8 +92,6 @@ public class MainActivity extends ActionBarActivity {
      * on the main activity
      */
     private void actionBarRefreshClicked(){
-
-        storiesCreater.refreshStories(this);
         storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -93,7 +102,27 @@ public class MainActivity extends ActionBarActivity {
         StoriesBank.clear();
         storyRecyclerViewAdapter.notifyDataSetChanged();
     }
+
+    private class DownloadData extends AsyncTask<URL, Integer, Long>{
+
+
+        @Override
+        protected Long doInBackground(URL[] url) {
+            TestingStoryReader.run();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Long o) {
+            storyRecyclerViewAdapter.notifyDataSetChanged();
+        }
+    }
 }
+
+
+
+
+
 
 /*
 
