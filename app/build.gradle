@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:+'
     compile files('libs/jsoup-1.8.1.jar')
     compile files('libs/jsoup-1.8.1-javadoc.jar')
+    compile 'com.squareup.picasso:picasso:2.4.0'
 }

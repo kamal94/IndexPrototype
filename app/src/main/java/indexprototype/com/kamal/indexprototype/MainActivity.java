@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.TestingStoryReader;
 import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
@@ -31,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setElevation(0);
 
         new DownloadData().execute();
+        new DownloadStoryImages().execute();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -94,6 +99,9 @@ public class MainActivity extends ActionBarActivity {
         storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * A class that runs the download for the stories from the internet on a separate thread.
+     */
     private class DownloadData extends AsyncTask<String, Integer, Boolean>{
 
         @Override
@@ -105,6 +113,30 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(Boolean result) {
             if (result)
                 storyRecyclerViewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class DownloadStoryImages extends AsyncTask<Story, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Story... params) {
+
+            for(Story story: StoriesBank.getStories()){
+                try {
+                    System.out.println(story.getImageURL());
+                    if(!story.getImageURL().equals(Story.NO_IMAGE))
+                        story.setImageBitmap(Picasso.with(getApplicationContext()).load(story.getImageURL()).get());
+                    System.out.println(story.getImageURL());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            storyRecyclerViewAdapter.notifyDataSetChanged();
         }
     }
 }

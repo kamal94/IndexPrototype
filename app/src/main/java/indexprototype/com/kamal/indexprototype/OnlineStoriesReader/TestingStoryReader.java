@@ -30,9 +30,9 @@ public class TestingStoryReader {
 	}
 		for(Elements elementsCollection: elementsArray){
 			for(Element element: elementsCollection){
-				StoryCreater fetcher = new StoryCreater();
-				fetcher.readStory(URLTokenizer.getURL(element.toString()));
-				fetcher.addStory();
+				StoryCreater storyCreater = new StoryCreater();
+				storyCreater.readStory(URLTokenizer.getURL(element.toString()));
+				storyCreater.addStory();
 			}
 		}
         if(StoriesBank.howMany()>0)

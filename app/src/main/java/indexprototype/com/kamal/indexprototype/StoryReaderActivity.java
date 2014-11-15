@@ -1,9 +1,11 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.UUID;
@@ -13,6 +15,7 @@ public class StoryReaderActivity extends ActionBarActivity {
 
     private TextView title;
     private TextView content;
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,9 @@ public class StoryReaderActivity extends ActionBarActivity {
 
         UUID storyID = (UUID) getIntent().getSerializableExtra("STORY_ID");
         Story story = (StoriesBank.findById(storyID));
+
+        image = (ImageView) findViewById(R.id.story_reader_storyImage);
+        image.setImageDrawable(new BitmapDrawable(getResources(),story.getImageBitmap()));
 
         title = (TextView) findViewById(R.id.story_reader_story_title);
         title.setText(story.getTitle());

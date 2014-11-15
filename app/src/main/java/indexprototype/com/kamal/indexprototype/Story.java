@@ -1,20 +1,23 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.graphics.Bitmap;
+
 import java.util.UUID;
 
 /**
  * Created by Kamal on 9/23/2014.
  */
 
-//STUB...NEEDS TO CREATE AN IMPLEMENTAITON OF AN IMAGEVIEW FOR EACH STORY, TO HOLD IT'S SOTRY IMAGE
+
 public class Story {
 
+    public final static String NO_IMAGE = "NOIMAGE";
     private String title;
     private UUID ID;
     private String content;
     private String author;
-    private int orderNumber;
     private String mImageURL;
+    private Bitmap mImageBitmap;
 
     public Story(String Author, String Title, String Content, String imageURL){
         if(Title!=null)
@@ -33,7 +36,7 @@ public class Story {
         if(imageURL!=null)
             mImageURL = imageURL;
         else
-            mImageURL = "No Image";
+            mImageURL = "http://i0.wp.com/www.thekzooindex.com/wp-content/uploads/2014/08/Index-I2.png?resize=70%2C53";
     }
 
 
@@ -48,7 +51,15 @@ public class Story {
     public UUID getID(){
         return ID;
     }
-
+    public String getImageURL(){
+        return mImageURL;
+    }
+    public void setImageBitmap(Bitmap bitmap){
+        mImageBitmap = bitmap;
+    }
+    public Bitmap getImageBitmap(){
+        return mImageBitmap;
+    }
     public boolean hasContent(){
         return (!content.trim().equals(""));
     }

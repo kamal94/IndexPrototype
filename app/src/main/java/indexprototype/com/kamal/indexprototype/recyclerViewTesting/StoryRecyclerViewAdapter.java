@@ -2,11 +2,13 @@ package indexprototype.com.kamal.indexprototype.recyclerViewTesting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.UUID;
@@ -70,6 +72,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
         Story story = StoriesBank.findByIndex(i);
         viewHolder.largeText.setText(story.getTitle());
         viewHolder.smallText.setText(story.getContent());
+        viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
         viewHolder.id = story.getID();
     }
 
@@ -99,6 +102,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
         TextView smallText; //the content of the story
         Intent intent;      //the intent that gets called when a story is clicked
         UUID id;            //the id of the story...used to create an intent to the StoryReaderActivity
+        ImageView image;     //the image of the story
         //class to locate the specific story that was clicked
 
         /**
@@ -117,6 +121,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
             //STUB NEEDS TO ADD AN IMPLEMENTATION OF SETTING THE IMAGE.
             largeText = (TextView) storyCardView.findViewById(R.id.story_list_view_large_text_view);
             smallText = (TextView) storyCardView.findViewById(R.id.story_list_view_small_text_view);
+            image = (ImageView) storyCardView.findViewById(R.id.story_list_view_image_view);
             intent = new Intent(context, StoryReaderActivity.class);
 
             //sets an OnClickListener for the cardview to handle clicks.

@@ -29,7 +29,7 @@ public class StoryCreater {
 	private String imageURL = null; //The URL string of the story's image
 	
 	public void readStory(String url){
-        //reads the url as
+        //reads the url as a Jsoup Document
 		mUrl = url;
 		try {
 			 doc =   Jsoup.connect(mUrl).get();
@@ -37,45 +37,52 @@ public class StoryCreater {
 			e.printStackTrace();
 		}
 
-		Elements elements = doc.getElementsByAttributeValue("class", "entry clearfix");
+        //gets elements according to their classes' attributes
+		Elements storyContentElements = doc.getElementsByAttributeValue("class", "entry clearfix");
 		Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
 		Elements titles = doc.getElementsByAttributeValueContaining("class", "entry-title");
-		ArrayList<Elements> innerElementsArray = new ArrayList<Elements>();
-		for(Element element: elements){
+		ArrayList<Elements> innerElementsArray = new ArrayList<Elements>(); //creats an arraylist that will be filled with inner elements of mStoryContent paragraphs
+
+        //adds inner elements that have the story content in the arraylist
+		for(Element element: storyContentElements){
 			Elements innerElements = element.children();
 			innerElementsArray.add(innerElements);
 		}
+
+        //searches for the author and sets mAuthorName to it. If no author name is found, mAuthorName is set to null
 		for(Element element: author){
 			String authorTag = element.toString();
 			int start = authorTag.indexOf("By");
 			int end = authorTag.indexOf("<", start);
 			if(start!=-1){
-				mAuthorName = authorTag.substring(start, end);
+				mAuthorName = authorTag.substring(start + 3, end);
 			}
-			
 		}
 
+        //searches for the title and sets it
 		for(Element element: titles){
 			mTitle = element.ownText();
 		}
 
+        //adds the paragraphs to mStoryContent, and searches for an image URL in the story.
 		for(Elements elementsCollection: innerElementsArray){
 			for(Element element: elementsCollection){
 				if(element.hasText())
-					System.out.println(element);
 					mStoryContent += element.ownText() + "\n" + "\t";
 				if(ImageContainerDeterminer.containsImage(element.toString())){
 					imageURL = ImageContainerDeterminer.getImageURL(element.toString());
-					System.out.println(imageURL);
 				}
 			}
-			System.out.println(mStoryContent);
 		}
 	}
-	
+
+    /**
+     * adds the story to the StoriesBank only if the story has content.
+     */
 	public void addStory(){
 		Story story = new Story(mAuthorName, mTitle, mStoryContent, imageURL);
-		StoriesBank.addStory(story);
+        if(story.hasContent())
+		    StoriesBank.addStory(story);
 	}
 
 
