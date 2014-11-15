@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import indexprototype.com.kamal.indexprototype.R;
@@ -51,7 +50,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
      */
     @Override
     public StoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        CardView v = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_maybe, viewGroup, false);
+        CardView v = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_implementation, viewGroup, false);
 
         ViewHolder vh = new ViewHolder(v, mContext);
         return vh;

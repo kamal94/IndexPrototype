@@ -11,25 +11,32 @@ import java.util.ArrayList;
 import indexprototype.com.kamal.indexprototype.StoriesBank;
 import indexprototype.com.kamal.indexprototype.Story;
 
-
+/**
+ * A class that creates a story by accessing its link.
+ *
+ * @author Kamal Kamalaldin
+ * @version 11/14/2014
+ */
 public class StoryCreater {
 
-	private String mUrl;
-	private String mStory = "";
-	private String mImageUrl;
-	private String authorName;
-	private String title = "";
-	private Document doc = null;
-	private String imageURL = null;
+
+    //private instance fields
+	private String mUrl;    //The url of the Story website
+	private String mStoryContent = ""; //The contents of the story
+	private String mAuthorName = ""; //The name of the author
+	private String mTitle = "";  //The title of the story
+	private Document doc = null;    //The representation of the story website for Jsoup
+	private String imageURL = null; //The URL string of the story's image
 	
 	public void readStory(String url){
-
+        //reads the url as
 		mUrl = url;
 		try {
 			 doc =   Jsoup.connect(mUrl).get();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		Elements elements = doc.getElementsByAttributeValue("class", "entry clearfix");
 		Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
 		Elements titles = doc.getElementsByAttributeValueContaining("class", "entry-title");
@@ -43,33 +50,31 @@ public class StoryCreater {
 			int start = authorTag.indexOf("By");
 			int end = authorTag.indexOf("<", start);
 			if(start!=-1){
-				//System.out.println(element.toString());
-				authorName = authorTag.substring(start, end);
-				//System.out.println("|" + authorName+ "|");
+				mAuthorName = authorTag.substring(start, end);
 			}
 			
 		}
-		//works every time
+
 		for(Element element: titles){
-			title = element.ownText();
+			mTitle = element.ownText();
 		}
 
 		for(Elements elementsCollection: innerElementsArray){
 			for(Element element: elementsCollection){
 				if(element.hasText())
 					System.out.println(element);
-					mStory += element.ownText() + "\n" + "\t";
+					mStoryContent += element.ownText() + "\n" + "\t";
 				if(ImageContainerDeterminer.containsImage(element.toString())){
 					imageURL = ImageContainerDeterminer.getImageURL(element.toString());
 					System.out.println(imageURL);
 				}
 			}
-			System.out.println(mStory);
+			System.out.println(mStoryContent);
 		}
 	}
 	
 	public void addStory(){
-		Story story = new Story(authorName, title, mStory, imageURL);
+		Story story = new Story(mAuthorName, mTitle, mStoryContent, imageURL);
 		StoriesBank.addStory(story);
 	}
 

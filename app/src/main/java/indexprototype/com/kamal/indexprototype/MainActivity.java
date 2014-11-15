@@ -30,15 +30,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
 
-//
-//        //fetches the data from the website in a separate thread
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                TestingStoryReader.run();
-//            }
-//        }).start();
-//
         new DownloadData().execute();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -104,8 +95,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private class DownloadData extends AsyncTask<String, Integer, Boolean>{
-
-        Boolean result;
 
         @Override
         protected Boolean doInBackground(String... params) {
