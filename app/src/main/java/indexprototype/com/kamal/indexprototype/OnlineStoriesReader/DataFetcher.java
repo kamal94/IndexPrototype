@@ -42,16 +42,22 @@ public class DataFetcher {
             switch (i){
                 case 0: section = StoriesBank.NEWS;
                     url = StoriesBank.NEWS_URL;
+                    break;
                 case 1: section = StoriesBank.FEATURES;
                     url = StoriesBank.FEATURES_URL;
+                    break;
                 case 2: section = StoriesBank.ARTS;
                     url = StoriesBank.ARTS_URL;
+                    break;
                 case 3: section = StoriesBank.OPINIONS;
                     url = StoriesBank.OPINIONS_URL;
+                    break;
                 case 4: section = StoriesBank.SPORTS;
                     url = StoriesBank.SPORTS_URL;
+                    break;
                 case 5: section = StoriesBank.BUZZKILL;
                     url = StoriesBank.BUZZKILL_URL;
+                    break;
             }
             Document doc = null;
             try {
