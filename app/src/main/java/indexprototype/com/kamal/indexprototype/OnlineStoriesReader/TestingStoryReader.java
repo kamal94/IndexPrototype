@@ -15,7 +15,7 @@ public class TestingStoryReader {
 
 	public static boolean run() {
 		Document doc = null;
-		String url = "http://www.thekzooindex.com/";
+		String url = "http://www.thekzooindex.com/category/news/";
 		try {
 			 doc =   Jsoup.connect(url).get();
 		} catch (IOException e) {

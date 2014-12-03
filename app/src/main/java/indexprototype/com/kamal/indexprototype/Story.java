@@ -18,6 +18,7 @@ public class Story {
     private String author;
     private String mImageURL;
     private Bitmap mImageBitmap;
+    private String mSection;
 
     public Story(String Author, String Title, String Content, String imageURL){
         if(Title!=null)

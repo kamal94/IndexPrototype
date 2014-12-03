@@ -10,10 +10,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-
+import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownloadThread;
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.TestingStoryReader;
 import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
@@ -122,6 +119,12 @@ public class MainActivity extends ActionBarActivity {
         protected Boolean doInBackground(Story... params) {
 
             for(Story story: StoriesBank.getStories()){
+                ImageDownloadThread imageDownloadThread = new ImageDownloadThread();
+                imageDownloadThread.set(getApplicationContext(), story);
+                DownloadStoryImage.execute(imageDownloadThread);
+            }
+            /*
+            for(Story story: StoriesBank.getStories()){
                 try {
                     System.out.println(story.getImageURL());
                     if(!story.getImageURL().equals(Story.NO_IMAGE))
@@ -130,7 +133,18 @@ public class MainActivity extends ActionBarActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            storyRecyclerViewAdapter.notifyDataSetChanged();
+        }
+    }private class DownloadStoryImage extends AsyncTask<ImageDownloadThread, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(ImageDownloadThread... params) {
             return null;
         }
 
