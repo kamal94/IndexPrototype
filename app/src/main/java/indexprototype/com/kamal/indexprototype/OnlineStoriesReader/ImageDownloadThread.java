@@ -16,10 +16,11 @@ public class ImageDownloadThread implements Runnable{
     private Context mContext;
     private Story mStory;
 
-    public void set(Context context, Story story){
+    public ImageDownloadThread(Context context, Story story){
         mContext = context;
         mStory = story;
     }
+
 
     @Override
     public void run() {

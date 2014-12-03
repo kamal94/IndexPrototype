@@ -73,4 +73,19 @@ public class StoriesBank {
                 System.out.println(story.toString());
         }
     }
+
+    public static final String NEWS = "News";
+    public static final String NEWS_URL = "http://www.thekzooindex.com/category/news/";
+    public static final String FEATURES = "Features";
+    public static final String FEATURES_URL = "http://www.thekzooindex.com/category/features/";
+    public static final String ARTS = "Arts";
+    public static final String ARTS_URL = "http://www.thekzooindex.com/category/arts/";
+    public static final String ARRTS_FULL = "Arts and Entertainment";
+    public static final String ARTS_SHORT = "A&E";
+    public static final String OPINIONS = "Opinions";
+    public static final String OPINIONS_URL = "http://www.thekzooindex.com/category/opinions/";
+    public static final String SPORTS = "Sports";
+    public static final String SPORTS_URL = "http://www.thekzooindex.com/category/sports/";
+    public static final String BUZZKILL = "BUZKILL";
+    public static final String BUZZKILL_URL = "http://www.thekzooindex.com/category/buzzkill/";
 }

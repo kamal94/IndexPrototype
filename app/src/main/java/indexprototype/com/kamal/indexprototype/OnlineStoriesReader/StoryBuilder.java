@@ -17,7 +17,7 @@ import indexprototype.com.kamal.indexprototype.Story;
  * @author Kamal Kamalaldin
  * @version 11/14/2014
  */
-public class StoryCreater {
+public class StoryBuilder {
 
 
     //private instance fields
@@ -27,7 +27,11 @@ public class StoryCreater {
 	private String mTitle = "";  //The title of the story
 	private Document doc = null;    //The representation of the story website for Jsoup
 	private String imageURL = null; //The URL string of the story's image
-	
+
+    /**
+     * Reads a story from a URL string.
+     * @param url   A URL, in String fromat, that points to the story to be built.
+     */
 	public void readStory(String url){
         //reads the url as a Jsoup Document
 		mUrl = url;
@@ -77,10 +81,10 @@ public class StoryCreater {
 	}
 
     /**
-     * adds the story to the StoriesBank only if the story has content.
+     * Adds the story to the StoriesBank only if the story has content.
      */
-	public void addStory(){
-		Story story = new Story(mAuthorName, mTitle, mStoryContent, imageURL);
+	public void addStory(String section){
+		Story story = new Story(mAuthorName, mTitle, mStoryContent, imageURL, section);
         if(story.hasContent())
 		    StoriesBank.addStory(story);
 	}

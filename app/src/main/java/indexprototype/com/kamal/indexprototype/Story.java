@@ -20,7 +20,7 @@ public class Story {
     private Bitmap mImageBitmap;
     private String mSection;
 
-    public Story(String Author, String Title, String Content, String imageURL){
+    public Story(String Author, String Title, String Content, String imageURL, String section){
         if(Title!=null)
             title = Title.trim();
         else
@@ -38,6 +38,7 @@ public class Story {
             mImageURL = imageURL;
         else
             mImageURL = "http://i0.wp.com/www.thekzooindex.com/wp-content/uploads/2014/08/Index-I2.png?resize=70%2C53";
+        mSection = section;
     }
 
 

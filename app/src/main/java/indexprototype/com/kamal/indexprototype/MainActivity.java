@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownloadThread;
-import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.TestingStoryReader;
 import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
 
@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            return TestingStoryReader.run();
+            return DataFetcher.run();
         }
 
         @Override
@@ -119,8 +119,7 @@ public class MainActivity extends ActionBarActivity {
         protected Boolean doInBackground(Story... params) {
 
             for(Story story: StoriesBank.getStories()){
-                ImageDownloadThread imageDownloadThread = new ImageDownloadThread();
-                imageDownloadThread.set(getApplicationContext(), story);
+                ImageDownloadThread imageDownloadThread = new ImageDownloadThread(getApplicationContext(), story);
                 DownloadStoryImage.execute(imageDownloadThread);
             }
             /*
