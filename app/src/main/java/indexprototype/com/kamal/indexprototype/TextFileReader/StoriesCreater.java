@@ -14,7 +14,10 @@ import indexprototype.com.kamal.indexprototype.StoriesBank;
 import indexprototype.com.kamal.indexprototype.Story;
 
 /**
+ * A class that reads stories from a plain text file.
  * Created by Kamal on 10/19/2014.
+ * @author Kamal Kamalaldin
+ * @version 12/02/2014
  */
 public class StoriesCreater {
 

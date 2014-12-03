@@ -73,7 +73,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
         viewHolder.largeText.setText(story.getTitle());
         viewHolder.smallText.setText(story.getContent());
         viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
-        viewHolder.id = story.getID();
+        viewHolder.id = story.UUID();
     }
 
     /**

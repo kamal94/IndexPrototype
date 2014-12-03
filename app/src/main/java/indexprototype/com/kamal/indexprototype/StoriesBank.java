@@ -5,7 +5,12 @@ import java.util.Iterator;
 import java.util.UUID;
 
 /**
+ * A singleton class that stores that stories that are fetched by the application and
+ * manages their sorting and access.
  * Created by Kamal on 10/19/2014.
+ *
+ * @author Kamal Kamalaldin
+ * @version 12/02/2014
  */
 public class StoriesBank {
 
@@ -24,11 +29,11 @@ public class StoriesBank {
      * Finds the story in the bank that has the same UUID
      *
      * @param uuid The UUID of the story to be found
-     * @return
+     * @return story    The story with the specified UUID.
      */
     public static Story findById(UUID uuid) {
         for (Story story : stories) {
-            if (story.getID().equals(uuid))
+            if (story.UUID().equals(uuid))
                 return story;
         }
 
@@ -38,10 +43,10 @@ public class StoriesBank {
     /**
      * Finds the story in the bank with the story index.
      * Used mainly for the <Code>StoryRecyclerViewAdaoter</Code> to
-     * keep the cards and stories in synch.
+     * keep the cards and stories insynch.
      *
      * @param index The index of the story in the stories arraylist
-     * @return
+     * @return  story   The story that occupies the List index in the database.
      */
     public static Story findByIndex(int index) {
         return stories.get(index);
@@ -56,12 +61,12 @@ public class StoriesBank {
 
     }
 
+    /**
+     * Provides the current number of stories in the database.
+     * @return count The current number of stories in the database.
+     */
     public static int howMany(){
-        int count  = 0;
-        for(Story story: stories){
-            count++;
-        }
-        return count;
+        return stories.size();
     }
 
     /**
@@ -74,6 +79,9 @@ public class StoriesBank {
         }
     }
 
+
+    //Constants that are used by other classes to define story sections
+    //and their perspective URL strings.
     public static final String NEWS = "News";
     public static final String NEWS_URL = "http://www.thekzooindex.com/category/news/";
     public static final String FEATURES = "Features";
