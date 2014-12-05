@@ -71,9 +71,9 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
     public void onBindViewHolder(StoryRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         Story story = StoriesBank.findByIndex(i);
         viewHolder.largeText.setText(story.getTitle());
-        viewHolder.smallText.setText(story.getContent());
+//        viewHolder.smallText.setText(story.getContent()); deactivated to test for faster, less involved story download
         viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
-        viewHolder.id = story.UUID();
+        viewHolder.id = story.getID();
     }
 
     /**

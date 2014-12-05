@@ -33,7 +33,7 @@ public class StoriesBank {
      */
     public static Story findById(UUID uuid) {
         for (Story story : stories) {
-            if (story.UUID().equals(uuid))
+            if (story.getID().equals(uuid))
                 return story;
         }
 

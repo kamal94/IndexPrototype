@@ -20,14 +20,19 @@ public class Story {
 
     //private instance variables
     private String title;
+    private String mStoryURL;
     private UUID ID;
-    private String content;
+    private String mContent;
     private String author;
     private String mImageURL;
     private Bitmap mImageBitmap;
     private String mSection;
 
-    public Story(String Author, String Title, String Content, String imageURL, String section){
+    public Story(String storyURL, String Author, String Title, String Content, String imageURL, String section){
+        if(storyURL!=null)
+            mStoryURL = storyURL;
+        else
+            mStoryURL = "No URL";
         if(Title!=null)
             title = Title.trim();
         else
@@ -38,13 +43,13 @@ public class Story {
             author = "No author";
         ID = UUID.randomUUID();
         if(Content!=null)
-            content = Content.trim();
+            mContent = Content.trim();
         else
-            content = "No content";
+            mContent = "No mContent";
         if(imageURL!=null)
             mImageURL = imageURL;
         else
-            mImageURL = "http://i0.wp.com/www.thekzooindex.com/wp-content/uploads/2014/08/Index-I2.png?resize=70%2C53";
+            mImageURL = "http://i0.wp.com/www.thekzooindex.com/wp-mContent/uploads/2014/08/Index-I2.png?resize=70%2C53";
         mSection = section;
     }
 
@@ -58,19 +63,44 @@ public class Story {
 
     /**
      * Returns the body of the story.
-     * @return  content The body of the story.
+     * @return  mContent The body of the story.
      */
     public String getContent(){
-        return content;
+        return mContent;
     }
 
     /**
-     * Returns the unique ID of the story.
-     * @return UUID The UUID of the story.
+     * Rerturns the section the story belongs to.
+     * @return  section The section that the story belongs to.
      */
-    public UUID UUID(){
-        return ID;
+    public String getSection() {
+        return mSection;
     }
+
+    /**
+     * Returns String representation of the author of the story
+     * @return author The the author of the story.
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     * Sets the author of the story
+     * @param author The name of the author of the story
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * Sets the content of the story.
+     * @param content   The content of the story in a String format.
+     */
+    public void setContent(String content){
+        mContent = content;
+    }
+
 
     /**
      * Returns the image URL of the story in a String representation.
@@ -78,6 +108,24 @@ public class Story {
      */
     public String getImageURL(){
         return mImageURL;
+    }
+
+    /**
+     * Returns the URL that points to the story on the website.
+     * @return  URL A string representation of the URL that points to the story
+     * on the website.
+     */
+    public String getStoryURL() {
+        return mStoryURL;
+    }
+
+    /**
+     * Returns the unique ID of the story in a UUID format.
+     * @return UUID The UUID object of the story that represents the unique ID
+     * of the story within the <class>StoriesBank</class>.
+     */
+    public UUID getID() {
+        return ID;
     }
 
     /**
@@ -101,7 +149,7 @@ public class Story {
      * @return boolean True if the story's body is not an empty string.
      */
     public boolean hasContent(){
-        return (!content.trim().equals(""));
+        return (!mContent.trim().equals(""));
     }
 
     /**
@@ -113,7 +161,7 @@ public class Story {
         string += "title: " +title + "\n";
         string += "author: " + author + "\n";
         string += "Image: " + mImageURL + "\n";
-        string += "content: " + content + "\n";
+        string += "mContent: " + mContent + "\n";
 
         return string;
     }

@@ -1,6 +1,7 @@
 package indexprototype.com.kamal.indexprototype;
 
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -10,12 +11,17 @@ import android.widget.TextView;
 
 import java.util.UUID;
 
+import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.StoryBuilder;
+
 
 public class StoryReaderActivity extends ActionBarActivity {
 
     private TextView title;
+    private TextView section;
+    private TextView author;
     private TextView content;
     private ImageView image;
+    private Story story;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +29,23 @@ public class StoryReaderActivity extends ActionBarActivity {
         setContentView(R.layout.activity_story_reader);
 
         UUID storyID = (UUID) getIntent().getSerializableExtra("STORY_ID");
-        Story story = (StoriesBank.findById(storyID));
+        story = (StoriesBank.findById(storyID));
 
+        new StoryDownloader().execute(story);
         image = (ImageView) findViewById(R.id.story_reader_storyImage);
         image.setImageDrawable(new BitmapDrawable(getResources(),story.getImageBitmap()));
 
         title = (TextView) findViewById(R.id.story_reader_story_title);
         title.setText(story.getTitle());
 
+        section = (TextView) findViewById(R.id.story_list_view_story_section);
+        section.setText(story.getSection());
+
+        author = (TextView) findViewById(R.id.story_list_view_story_author);
+        author.setText(story.getAuthor());
+
         content = (TextView) findViewById(R.id.story_reader_story_content);
-        content.setText(story.getContent());
+//        content.setText(story.getContent());
 
     }
 
@@ -54,5 +67,21 @@ public class StoryReaderActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class StoryDownloader extends AsyncTask<Story, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Story... params) {
+            StoryBuilder storyBuilder = new StoryBuilder();
+            storyBuilder.readStory(params[0].getStoryURL(), params[0].getID());
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            content.setText(story.getContent());
+            author.setText(story.getAuthor());
+        }
     }
 }

@@ -1,12 +1,16 @@
 package indexprototype.com.kamal.indexprototype.OnlineStoriesReader;
 
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import indexprototype.com.kamal.indexprototype.StoriesBank;
 import indexprototype.com.kamal.indexprototype.Story;
@@ -21,30 +25,68 @@ public class StoryBuilder {
 
 
     //private instance fields
-	private String mUrl;    //The url of the Story website
+	private String mURL;  //The url of the Story website
 	private String mStoryContent = ""; //The contents of the story
 	private String mAuthorName = ""; //The name of the author
 	private String mTitle = "";  //The title of the story
 	private Document doc = null;    //The representation of the story website for Jsoup
 	private String imageURL = null; //The URL string of the story's image
 
+    public boolean getStoryGist(Element element, String section){
+
+        if(element==null)
+            return false;
+
+        mURL = URLTokenizer.getURL(element.toString());
+        Elements title = element.getElementsByAttributeValue("class", "loop-title");
+        for(Element ele: title){
+            mTitle = ele.text();
+        }
+        if(ImageContainerDeterminer.containsImage(element.toString())){
+            imageURL = ImageContainerDeterminer.getImageURL(element.toString());
+        }
+//
+//        Log.d("StoryBuilder", "Story Gist: \n" + "link: " + mURL + "\ntitle: " + mTitle + "\nimageURL : " + imageURL);
+
+        StoriesBank.addStory(new Story(mURL, null, mTitle, null, imageURL, section));
+
+        return true;
+    }
     /**
      * Reads a story from a URL string.
      * @param url   A URL, in String fromat, that points to the story to be built.
+     * @return boolean True if the story was read successfully. False if any errors
+     * were encountered.
      */
-	public void readStory(String url){
+	public boolean readStory(String url, UUID uuid){
         //reads the url as a Jsoup Document
-		mUrl = url;
+		mURL = url;
 		try {
-			 doc =   Jsoup.connect(mUrl).get();
-		} catch (IOException e) {
+			 doc =   Jsoup.connect(mURL).get();
+		} catch (SocketTimeoutException e){
+            Log.e("StoryBuilder", "Connection timed out while accessing " + url + " \n Trying again...!");
+            try{
+                doc = Jsoup.connect(mURL).get();
+            } catch (SocketTimeoutException e1){
+                Log.e("StoryBuilder", "Connection timed out again while accessing " + url + " \n Trying For the third time...!");
+                try {
+                    doc = Jsoup.connect(mURL).get();
+                } catch(SocketTimeoutException e2){
+                    Log.e("StoryBuilder", "Connection timed out for the third time while accessing " + url + " \n Aborting!");
+                    return false;
+                } catch(IOException e2) {
+                    e2.printStackTrace();
+                }
+            } catch (IOException e1){
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
 			e.printStackTrace();
 		}
 
         //gets elements according to their classes' attributes
 		Elements storyContentElements = doc.getElementsByAttributeValue("class", "entry clearfix");
 		Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
-		Elements titles = doc.getElementsByAttributeValueContaining("class", "entry-title");
 		ArrayList<Elements> innerElementsArray = new ArrayList<Elements>(); //creats an arraylist that will be filled with inner elements of mStoryContent paragraphs
 
         //adds inner elements that have the story content in the arraylist
@@ -63,31 +105,17 @@ public class StoryBuilder {
 			}
 		}
 
-        //searches for the title and sets it
-		for(Element element: titles){
-			mTitle = element.ownText();
-		}
-
         //adds the paragraphs to mStoryContent, and searches for an image URL in the story.
 		for(Elements elementsCollection: innerElementsArray){
 			for(Element element: elementsCollection){
 				if(element.hasText())
 					mStoryContent += element.ownText() + "\n" + "\t";
-				if(ImageContainerDeterminer.containsImage(element.toString())){
-					imageURL = ImageContainerDeterminer.getImageURL(element.toString());
-				}
 			}
+            Log.d("StoryBuilder", "Content read: " + mStoryContent);
 		}
+
+        StoriesBank.findById(uuid).setContent(mStoryContent);
+        StoriesBank.findById(uuid).setAuthor(mAuthorName);
+        return true;
 	}
-
-    /**
-     * Adds the story to the StoriesBank only if the story has content.
-     */
-	public void addStory(String section){
-		Story story = new Story(mAuthorName, mTitle, mStoryContent, imageURL, section);
-        if(story.hasContent())
-		    StoriesBank.addStory(story);
-	}
-
-
 }
