@@ -2,6 +2,8 @@ package indexprototype.com.kamal.indexprototype;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
 /**
@@ -14,15 +16,75 @@ import java.util.UUID;
  */
 public class StoriesBank {
 
-    private static ArrayList<Story> stories = new ArrayList<Story>();;
+    private static ArrayList<Story> stories = new ArrayList<Story>();
+    private static Queue<Story> sNewsStories = new LinkedList();
+    private static Queue<Story> sFeaturesStories = new LinkedList();
+    private static Queue<Story> sOpinionsStories = new LinkedList();
+    private static Queue<Story> sArtsStories = new LinkedList();
+    private static Queue<Story> sSportsStories = new LinkedList();
+    private static Queue<Story> sBuzzKillStories = new LinkedList();
 
     public static ArrayList<Story> getStories() {
         return stories;
     }
 
-    public static void addStory(Story story) {
-        stories.add(story);
+    /**
+     * Adds a story to the central stories database and to the story's
+     * perspective section. If both operations are achieved successfully,
+     * the method returns true. If either fails, the method returns false.
+     * @param story The story to be added to the database
+     * @return  boolean True if the story was added to the database and to the
+     * respective section of the story. False if the story was not added to either
+     * of the banks. The story is deleted from the central story bank if false is returned.
+     *
+     */
+    public static boolean addStory(Story story) {
+        int progress = 0;
+        if(stories.add(story))
+            progress++;
+        switch (story.getSection()){
+            case(StoriesBank.NEWS):
+                sNewsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.FEATURES):
+                sFeaturesStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.ARTS):
+                sArtsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.ARTS_SHORT):
+                sArtsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.ARRTS_FULL):
+                sArtsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.OPINIONS):
+                sOpinionsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.SPORTS):
+                sSportsStories.add(story);
+                progress++;
+                break;
+            case(StoriesBank.BUZZKILL):
+                sBuzzKillStories.add(story);
+                progress++;
+                break;
+            default:
+                return false;
+        }
+        if(progress==2)
+            return true;
+        else{
+            remove(story);
+        }
 
+        return false;
     }
 
     /**
@@ -77,6 +139,21 @@ public class StoriesBank {
             if (story.hasContent())
                 System.out.println(story.toString());
         }
+    }
+
+    /**
+     * Removes a story from the database. This method only removes the storyies
+     * from the central database, and not from the sections database.
+     * @param story The story to be removed from the central database.
+     * @return  story The story that was removed from the database. If the story
+     * does not exist in the database, the method returns null.
+     */
+    private static Story remove(Story story){
+        int result = stories.indexOf(story);
+        if (result==-1)
+            return null;
+        else
+            return stories.remove(result);
     }
 
 

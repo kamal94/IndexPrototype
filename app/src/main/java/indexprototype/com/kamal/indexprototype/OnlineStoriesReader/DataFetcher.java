@@ -96,7 +96,7 @@ public class DataFetcher {
                 e.printStackTrace();
             }
 
-            //fetches stories and creates stories from them.
+            //fetches story elements and creates gists from them using a StoryBuilder
             Elements elements = doc.getElementsByAttributeValue("class", tag);
             ArrayList<Elements> elementsArray = new ArrayList<Elements>();
             for(Element element: elements){
@@ -106,13 +106,15 @@ public class DataFetcher {
                 storyBuilder.getStoryGist(element, section);
                 elementsArray.add(innerElements);
             }
-            for(Elements elementsCollection: elementsArray){
-                for(Element element: elementsCollection){
-//                    Log.d("DataFetcher", element.toString());
-//                    if (storyBuilder.readStory(URLTokenizer.getURL(element.toString())))
-//                        storyBuilder.addStory(section);
-                }
-            }
+
+//            earlier implementation for fetching stories. Fetches all story information at once
+//            for(Elements elementsCollection: elementsArray){
+//                for(Element element: elementsCollection){
+////                    Log.d("DataFetcher", element.toString());
+////                    if (storyBuilder.readStory(URLTokenizer.getURL(element.toString())))
+////                        storyBuilder.addStory(section);
+//                }
+//            }
         }
 
         //compares final story numbers in bank to inital.

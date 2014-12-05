@@ -74,7 +74,7 @@ public class StoryReaderActivity extends ActionBarActivity {
         @Override
         protected Boolean doInBackground(Story... params) {
             StoryBuilder storyBuilder = new StoryBuilder();
-            storyBuilder.readStory(params[0].getStoryURL(), params[0].getID());
+            storyBuilder.readStory( params[0].getID());
             return true;
         }
 

@@ -7,12 +7,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownloadThread;
-import indexprototype.com.kamal.indexprototype.TextFileReader.StoriesCreater;
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
 
 
@@ -20,10 +18,11 @@ public class MainActivity extends ActionBarActivity {
 
 
     private RecyclerView recyclerView;
-    private ArrayAdapter arrayAdapter;
-    private StoriesCreater storiesCreater;
     private RecyclerView.LayoutManager layoutManager;
     private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
+
+    //    private ArrayAdapter arrayAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +95,18 @@ public class MainActivity extends ActionBarActivity {
         storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * A class that runs the download for the stories from the internet on a separate thread.
      */
@@ -113,6 +124,10 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+
+    /**
+     * A class that downloads images of stories.
+     */
     private class DownloadStoryImages extends AsyncTask<Story, Integer, Boolean>{
 
         @Override
@@ -120,30 +135,8 @@ public class MainActivity extends ActionBarActivity {
 
             for(Story story: StoriesBank.getStories()){
                 ImageDownloadThread imageDownloadThread = new ImageDownloadThread(getApplicationContext(), story);
-                DownloadStoryImage.execute(imageDownloadThread);
+                imageDownloadThread.run();
             }
-            /*
-            for(Story story: StoriesBank.getStories()){
-                try {
-                    System.out.println(story.getImageURL());
-                    if(!story.getImageURL().equals(Story.NO_IMAGE))
-                        story.setImageBitmap(Picasso.with(getApplicationContext()).load(story.getImageURL()).get());
-                    System.out.println(story.getImageURL());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            storyRecyclerViewAdapter.notifyDataSetChanged();
-        }
-    }private class DownloadStoryImage extends AsyncTask<ImageDownloadThread, Integer, Boolean>{
-
-        @Override
-        protected Boolean doInBackground(ImageDownloadThread... params) {
             return null;
         }
 

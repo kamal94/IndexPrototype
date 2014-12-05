@@ -32,6 +32,15 @@ public class StoryBuilder {
 	private Document doc = null;    //The representation of the story website for Jsoup
 	private String imageURL = null; //The URL string of the story's image
 
+    /**
+     * Creates a story gist from the element passed to it.
+     * @param element   An Element that contains the link to the story, the title of
+     *                  the story in text, and a link to the image of the story.
+     * @param section   The section that the story belongs to.
+     * @return  boolean True if the story was added successfully to the StoriesBank,
+     *                  false if an error was encountered while adding the story. If
+     *                  the passed Element is <code>null</code>, false is returned.
+     */
     public boolean getStoryGist(Element element, String section){
 
         if(element==null)
@@ -53,26 +62,26 @@ public class StoryBuilder {
         return true;
     }
     /**
-     * Reads a story from a URL string.
-     * @param url   A URL, in String fromat, that points to the story to be built.
+     * Reads a story from the website by fetching the story's URL
+     * from the database. It then
      * @return boolean True if the story was read successfully. False if any errors
      * were encountered.
      */
-	public boolean readStory(String url, UUID uuid){
+	public boolean readStory(UUID uuid){
         //reads the url as a Jsoup Document
-		mURL = url;
+		mURL = StoriesBank.findById(uuid).getStoryURL();
 		try {
 			 doc =   Jsoup.connect(mURL).get();
 		} catch (SocketTimeoutException e){
-            Log.e("StoryBuilder", "Connection timed out while accessing " + url + " \n Trying again...!");
+            Log.e("StoryBuilder", "Connection timed out while accessing " + mURL + " \n Trying again...!");
             try{
                 doc = Jsoup.connect(mURL).get();
             } catch (SocketTimeoutException e1){
-                Log.e("StoryBuilder", "Connection timed out again while accessing " + url + " \n Trying For the third time...!");
+                Log.e("StoryBuilder", "Connection timed out again while accessing " + mURL + " \n Trying For the third time...!");
                 try {
                     doc = Jsoup.connect(mURL).get();
                 } catch(SocketTimeoutException e2){
-                    Log.e("StoryBuilder", "Connection timed out for the third time while accessing " + url + " \n Aborting!");
+                    Log.e("StoryBuilder", "Connection timed out for the third time while accessing " + mURL + " \n Aborting!");
                     return false;
                 } catch(IOException e2) {
                     e2.printStackTrace();
