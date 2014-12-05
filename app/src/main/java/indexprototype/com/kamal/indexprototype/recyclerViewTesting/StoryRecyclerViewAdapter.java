@@ -34,14 +34,15 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
 
     //private instance fields
     private Context mContext;                   //the context of the activity that calls/creates the adapter
-
+    private String mSection;
     /**
      * simple constructor that
      *
      * @param context   The context of the activity that created the adapter
      */
-    public StoryRecyclerViewAdapter(Context context) {
+    public StoryRecyclerViewAdapter(Context context, String section) {
         mContext = context;
+        mSection = section;
     }
 
     /**
@@ -69,7 +70,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
      */
     @Override
     public void onBindViewHolder(StoryRecyclerViewAdapter.ViewHolder viewHolder, int i) {
-        Story story = StoriesBank.findByIndex(i);
+        Story story = StoriesBank.findByIndex(i, mSection);
         viewHolder.largeText.setText(story.getTitle());
 //        viewHolder.smallText.setText(story.getContent()); deactivated to test for faster, less involved story download
         viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
@@ -83,7 +84,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
      */
     @Override
     public int getItemCount() {
-        return StoriesBank.howMany();
+        return StoriesBank.getSection(mSection).size();
     }
 
 

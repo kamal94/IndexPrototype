@@ -3,12 +3,17 @@ package indexprototype.com.kamal.indexprototype;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * A singleton class that stores that stories that are fetched by the application and
  * manages their sorting and access.
+ *
+ * IMPORTANT NOTES:
+ *
+ *
+ *
  * Created by Kamal on 10/19/2014.
  *
  * @author Kamal Kamalaldin
@@ -17,12 +22,21 @@ import java.util.UUID;
 public class StoriesBank {
 
     private static ArrayList<Story> stories = new ArrayList<Story>();
-    private static Queue<Story> sNewsStories = new LinkedList();
-    private static Queue<Story> sFeaturesStories = new LinkedList();
-    private static Queue<Story> sOpinionsStories = new LinkedList();
-    private static Queue<Story> sArtsStories = new LinkedList();
-    private static Queue<Story> sSportsStories = new LinkedList();
-    private static Queue<Story> sBuzzKillStories = new LinkedList();
+    private static List<Story> sNewsStories = new LinkedList();
+    private static List<Story> sFeaturesStories = new LinkedList();
+    private static List<Story> sOpinionsStories = new LinkedList();
+    private static List<Story> sArtsStories = new LinkedList();
+    private static List<Story> sSportsStories = new LinkedList();
+    private static List<Story> sBuzzKillStories = new LinkedList();
+    private static ArrayList<List> sections = new ArrayList<List>(){{
+        add(sNewsStories);
+        add(sFeaturesStories);
+        add(sOpinionsStories);
+        add(sArtsStories);
+        add((sSportsStories));
+        add(sBuzzKillStories);
+    }};
+
 
     public static ArrayList<Story> getStories() {
         return stories;
@@ -87,6 +101,16 @@ public class StoriesBank {
         return false;
     }
 
+    public static List getNews(){
+        return sNewsStories;
+    }
+    /**
+     * Returns the queues of the sections in an arraylist.
+     * @return  ArrayList<Queue> The arraylist of the sections in queue format.
+     */
+    public static ArrayList<List> getSections(){
+        return sections;
+    }
     /**
      * Finds the story in the bank that has the same UUID
      *
@@ -112,6 +136,40 @@ public class StoriesBank {
      */
     public static Story findByIndex(int index) {
         return stories.get(index);
+    }
+
+    /**
+     * Finds the story in its specific section .
+     * Used mainly for the <Code>StoryRecyclerViewAdaoter</Code> to
+     * keep the cards and stories insynch.
+     *
+     * @param index The index of the story in the stories arraylist
+     * @param section The section that the story belongs to. Must be one of the
+     *                constants in <class>StoriesBank</class>.
+     * @return  story   The story that occupies the List index in the section.
+     *                  If no such story is found, null is returned.
+     */
+    public static Story findByIndex(int index, String section) {
+        switch (section){
+            case(StoriesBank.NEWS):
+                return sNewsStories.get(index);
+            case(StoriesBank.FEATURES):
+                return sFeaturesStories.get(index);
+            case(StoriesBank.ARTS):
+                return sArtsStories.get(index);
+            case(StoriesBank.ARTS_SHORT):
+                return sArtsStories.get(index);
+            case(StoriesBank.ARRTS_FULL):
+                return sArtsStories.get(index);
+            case(StoriesBank.OPINIONS):
+                return sOpinionsStories.get(index);
+            case(StoriesBank.SPORTS):
+                return sSportsStories.get(index);
+            case(StoriesBank.BUZZKILL):
+                return sBuzzKillStories.get(index);
+            default:
+                return null;
+        }
     }
 
     public static void clear(){
@@ -173,4 +231,32 @@ public class StoriesBank {
     public static final String SPORTS_URL = "http://www.thekzooindex.com/category/sports/";
     public static final String BUZZKILL = "BUZKILL";
     public static final String BUZZKILL_URL = "http://www.thekzooindex.com/category/buzzkill/";
+    public static final int NUM_OF_SECTIONS = sections.size();
+
+    /**
+     * Returns the stories in the desired section.
+     * @param section   The section whose stories are wanted.
+     *                  The string must be one of the constants in <class>StoriesBank</class>
+     *                  (eg. StoriesBank.NEWS for the List of news).
+     * @return  List    The list of stories in the desired section. If the entered value
+     *                  is not one of the acceptable constants, null is returned.
+     */
+    public static List getSection(String section) {
+        switch(section){
+            case(NEWS):
+                return sNewsStories;
+            case(FEATURES):
+                return sFeaturesStories;
+            case(ARTS):
+                return sArtsStories;
+            case(OPINIONS):
+                return sOpinionsStories;
+            case(SPORTS):
+                return sSportsStories;
+            case(BUZZKILL):
+                return sBuzzKillStories;
+            default:
+                return null;
+        }
+    }
 }

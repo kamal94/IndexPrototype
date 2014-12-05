@@ -1,25 +1,31 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownloadThread;
-import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
 
 
 public class MainActivity extends ActionBarActivity {
 
-
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
+//
+//    private RecyclerView recyclerView;
+//    private RecyclerView.LayoutManager layoutManager;
+//    private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
+    private SectionsAdapter mSectionsAdapter;
+    private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTabLayout;
 
     //    private ArrayAdapter arrayAdapter;
 
@@ -27,21 +33,78 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.e("MainActivity", "onCreate called.");
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
 
+        mSectionsAdapter = new SectionsAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.main_activity_view_pager);
+        mViewPager.setAdapter(mSectionsAdapter);
+
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.main_activity_sliding_tabs);
+        mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                switch (position){
+                    case(0):
+                        return Color.CYAN;
+                    case(1):
+                        return Color.YELLOW;
+                    case(2):
+                        return Color.RED;
+                    case(3):
+                        return Color.DKGRAY;
+                    case(4):
+                        return Color.WHITE;
+                    case(5):
+                        return Color.BLACK;
+                    default:
+                        return Color.CYAN;
+                }
+            }
+
+            @Override
+            public int getDividerColor(int position) {
+                switch (position){
+                    case(0):
+                        return Color.GRAY;
+                    case(1):
+                        return Color.GRAY;
+                    case(2):
+                        return Color.GRAY;
+                    case(3):
+                        return Color.GRAY;
+                    case(4):
+                        return Color.GRAY;
+                    case(5):
+                        return Color.GRAY;
+                    default:
+                        return Color.GRAY;
+                }
+            }
+        });
+
+
         new DownloadData().execute();
         new DownloadStoryImages().execute();
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        storyRecyclerViewAdapter = new StoryRecyclerViewAdapter(this);
-        recyclerView.setAdapter(storyRecyclerViewAdapter);
-        storyRecyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){});
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("MainActivity", "OnPause called.");
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.FROYO)
+            super.onSaveInstanceState(outState, outPersistentState);
+
+        Log.e("MainActivity", "onSaveInstanceState called.");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,7 +147,9 @@ public class MainActivity extends ActionBarActivity {
      * on the main activity
      */
     private void actionBarRefreshClicked(){
-        storyRecyclerViewAdapter.notifyDataSetChanged();
+
+        mSectionsAdapter.notifyDataSetChanged();
+//        storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -92,7 +157,8 @@ public class MainActivity extends ActionBarActivity {
      */
     private void actionBarRemoveClicked(){
         StoriesBank.clear();
-        storyRecyclerViewAdapter.notifyDataSetChanged();
+        mSectionsAdapter.notifyDataSetChanged();
+//        storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -120,7 +186,8 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result)
-                storyRecyclerViewAdapter.notifyDataSetChanged();
+                mSectionsAdapter.notifyDataSetChanged();
+//                storyRecyclerViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -142,7 +209,8 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            storyRecyclerViewAdapter.notifyDataSetChanged();
+            mSectionsAdapter.notifyDataSetChanged();
+//            storyRecyclerViewAdapter.notifyDataSetChanged();
         }
     }
 }
