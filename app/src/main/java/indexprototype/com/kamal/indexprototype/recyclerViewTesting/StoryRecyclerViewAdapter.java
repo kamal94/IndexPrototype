@@ -1,8 +1,11 @@
 package indexprototype.com.kamal.indexprototype.recyclerViewTesting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -110,6 +113,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
          * A <code>ViewHolder</code> constructor that sets a <Code>CardView</Code> to
          * display story information. This constructor also employs an <Code>OnClickListener</Code>
          * that listens to clicks on the <Code>CardView</Code>.
+         * INFORMATION: http://antonioleiva.com/material-design-everywhere/
          *
          * @param storyCardView A <Code>CardView</Code> that represents information of a story
          * @param context       Context of the activity that called the <Code>StoryRecyclerViewAdapter</Code>.
@@ -131,7 +135,11 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
                 public void onClick(View v) {
                     Intent intent = new Intent(context, StoryReaderActivity.class);
                     intent.putExtra("STORY_ID", id);
-                    context.startActivity(intent);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity) context, image, StoryReaderActivity.TRANSITION_IMAGE_NAME);
+                    ActivityCompat.startActivity((Activity) context , intent,
+                            options.toBundle());
+//                    context.startActivity(intent);
                 }
             });
         }

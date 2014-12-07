@@ -1,9 +1,15 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,28 +28,44 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.e("MainActivity", "onCreate called.");
         setContentView(R.layout.activity_main);
+        Log.e("MainActivity", "onCreate called.");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(toolbar!=null){
+            setSupportActionBar(toolbar);
+        }
+
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_dark));
+        }
+
+
 
         mSectionsAdapter = new SectionsAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.main_activity_view_pager);
         mViewPager.setAdapter(mSectionsAdapter);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.main_activity_sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.scroll_tab, R.id.scroll_tab_text_view);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setCustomTabColorizer(new CustomSlidingTabColors());
+        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.primary_color));
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo!= null && networkInfo.isConnected()) {
+            for (int i = 0; i < 6; i++) {
+                new DownloadData().execute(i);
+            }
 
-        for(int i=0; i<6; i++){
-            new DownloadData().execute(i);
+            for (int i = 0; i < 6; i++) {
+                new DownloadStoryImages().execute(i);
+            }
+        } else {
+            Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
         }
-
-        for(int i=0; i<6; i++){
-            new DownloadStoryImages().execute(i);
-        }
-
 
     }
 
