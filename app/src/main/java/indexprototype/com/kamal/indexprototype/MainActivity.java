@@ -1,11 +1,7 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.annotation.TargetApi;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -19,16 +15,9 @@ import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownload
 
 public class MainActivity extends ActionBarActivity {
 
-//
-//    private RecyclerView recyclerView;
-//    private RecyclerView.LayoutManager layoutManager;
-//    private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
     private SectionsAdapter mSectionsAdapter;
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
-
-    //    private ArrayAdapter arrayAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,67 +33,21 @@ public class MainActivity extends ActionBarActivity {
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.main_activity_sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
-        mSlidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                switch (position){
-                    case(0):
-                        return Color.CYAN;
-                    case(1):
-                        return Color.YELLOW;
-                    case(2):
-                        return Color.RED;
-                    case(3):
-                        return Color.DKGRAY;
-                    case(4):
-                        return Color.WHITE;
-                    case(5):
-                        return Color.BLACK;
-                    default:
-                        return Color.CYAN;
-                }
-            }
-
-            @Override
-            public int getDividerColor(int position) {
-                switch (position){
-                    case(0):
-                        return Color.GRAY;
-                    case(1):
-                        return Color.GRAY;
-                    case(2):
-                        return Color.GRAY;
-                    case(3):
-                        return Color.GRAY;
-                    case(4):
-                        return Color.GRAY;
-                    case(5):
-                        return Color.GRAY;
-                    default:
-                        return Color.GRAY;
-                }
-            }
-        });
+        mSlidingTabLayout.setCustomTabColorizer(new CustomSlidingTabColors());
 
 
-        new DownloadData().execute();
-        new DownloadStoryImages().execute();
+        for(int i=0; i<6; i++){
+            new DownloadData().execute(i);
+        }
+
+        for(int i=0; i<6; i++){
+            new DownloadStoryImages().execute(i);
+        }
+
+
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("MainActivity", "OnPause called.");
-    }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.FROYO)
-            super.onSaveInstanceState(outState, outPersistentState);
-
-        Log.e("MainActivity", "onSaveInstanceState called.");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,6 +92,8 @@ public class MainActivity extends ActionBarActivity {
     private void actionBarRefreshClicked(){
 
         mSectionsAdapter.notifyDataSetChanged();
+        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
+        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
 //        storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -158,7 +103,6 @@ public class MainActivity extends ActionBarActivity {
     private void actionBarRemoveClicked(){
         StoriesBank.clear();
         mSectionsAdapter.notifyDataSetChanged();
-//        storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 
@@ -176,18 +120,22 @@ public class MainActivity extends ActionBarActivity {
     /**
      * A class that runs the download for the stories from the internet on a separate thread.
      */
-    private class DownloadData extends AsyncTask<String, Integer, Boolean>{
+    private class DownloadData extends AsyncTask<Integer, Integer, Boolean>{
 
+        private int runningThread;
         @Override
-        protected Boolean doInBackground(String... params) {
-            return DataFetcher.run();
+        protected Boolean doInBackground(Integer... params) {
+            runningThread = params[0];
+            return DataFetcher.run(params[0]);
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (result)
+            if (result) {
                 mSectionsAdapter.notifyDataSetChanged();
-//                storyRecyclerViewAdapter.notifyDataSetChanged();
+                mSectionsAdapter.refreshFragment(runningThread);
+                Log.d("MainActivity", "running thread: " + runningThread);
+            }
         }
     }
 
@@ -195,11 +143,13 @@ public class MainActivity extends ActionBarActivity {
     /**
      * A class that downloads images of stories.
      */
-    private class DownloadStoryImages extends AsyncTask<Story, Integer, Boolean>{
+    private class DownloadStoryImages extends AsyncTask<Integer, Integer, Boolean>{
 
+        private int runningThread;
         @Override
-        protected Boolean doInBackground(Story... params) {
+        protected Boolean doInBackground(Integer... params) {
 
+            runningThread = params[0];
             for(Story story: StoriesBank.getStories()){
                 ImageDownloadThread imageDownloadThread = new ImageDownloadThread(getApplicationContext(), story);
                 imageDownloadThread.run();
@@ -210,7 +160,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             mSectionsAdapter.notifyDataSetChanged();
-//            storyRecyclerViewAdapter.notifyDataSetChanged();
+            mSectionsAdapter.refreshFragment(runningThread);
         }
     }
 }
@@ -249,3 +199,20 @@ STORY ADAPTER IF NEEDED
         }
 
  */
+
+
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        Log.e("MainActivity", "OnPause called.");
+//    }
+//
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    @Override
+//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+//        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.FROYO)
+//            super.onSaveInstanceState(outState, outPersistentState);
+//
+//        Log.e("MainActivity", "onSaveInstanceState called.");
+//    }

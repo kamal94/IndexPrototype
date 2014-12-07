@@ -72,7 +72,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
     public void onBindViewHolder(StoryRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         Story story = StoriesBank.findByIndex(i, mSection);
         viewHolder.largeText.setText(story.getTitle());
-//        viewHolder.smallText.setText(story.getContent()); deactivated to test for faster, less involved story download
+        viewHolder.byline.setText(story.getByline());
         viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
         viewHolder.id = story.getID();
     }
@@ -100,7 +100,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
 
         //local fields
         TextView largeText; //the title  of the story
-        TextView smallText; //the content of the story
+        TextView byline; //the content of the story
         Intent intent;      //the intent that gets called when a story is clicked
         UUID id;            //the id of the story...used to create an intent to the StoryReaderActivity
         ImageView image;     //the image of the story
@@ -121,7 +121,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
             //Sets the textviews and creates an intent to launch a StoryReaderActivity if the cardview is clicked.
             //STUB NEEDS TO ADD AN IMPLEMENTATION OF SETTING THE IMAGE.
             largeText = (TextView) storyCardView.findViewById(R.id.story_list_view_large_text_view);
-            smallText = (TextView) storyCardView.findViewById(R.id.story_list_view_small_text_view);
+            byline = (TextView) storyCardView.findViewById(R.id.story_list_view_small_text_view);
             image = (ImageView) storyCardView.findViewById(R.id.story_list_view_image_view);
             intent = new Intent(context, StoryReaderActivity.class);
 

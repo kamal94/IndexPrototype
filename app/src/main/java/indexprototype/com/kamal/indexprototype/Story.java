@@ -27,8 +27,9 @@ public class Story {
     private String mImageURL;
     private Bitmap mImageBitmap;
     private String mSection;
+    private String mByline;
 
-    public Story(String storyURL, String Author, String Title, String Content, String imageURL, String section){
+    public Story(String storyURL, String Author, String Title, String Content, String byline, String imageURL, String section){
         if(storyURL!=null)
             mStoryURL = storyURL;
         else
@@ -46,6 +47,10 @@ public class Story {
             mContent = Content.trim();
         else
             mContent = "No mContent";
+        if(byline!=null){
+            mByline=byline;
+        } else
+            mByline = "No byline";
         if(imageURL!=null)
             mImageURL = imageURL;
         else
@@ -101,6 +106,21 @@ public class Story {
         mContent = content;
     }
 
+    /**
+     * Gets the byline of the story.
+     * @return byline The byline of the story.
+     */
+    public String getByline() {
+        return mByline;
+    }
+
+    /**
+     * Sets the byline of the story.
+     * @param byline The desired byline of the story.
+     */
+    public void setByline(String byline) {
+        mByline = byline;
+    }
 
     /**
      * Returns the image URL of the story in a String representation.

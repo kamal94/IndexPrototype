@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import indexprototype.com.kamal.indexprototype.recyclerViewTesting.StoryRecyclerViewAdapter;
 
 
@@ -23,12 +21,9 @@ public class StoryListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION = "mSection";
-    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mSection;
-    private String mParam2;
-    private List stories;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
@@ -38,15 +33,14 @@ public class StoryListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param section Parameter 1.
      * @return A new instance of fragment StoryListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StoryListFragment newInstance(String param1) {
+    public static StoryListFragment newInstance(String section) {
         StoryListFragment fragment = new StoryListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_SECTION, param1);
-//        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_SECTION, section);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +54,6 @@ public class StoryListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSection = getArguments().getString(ARG_SECTION);
-            stories = StoriesBank.getNews();
         }
 
 
@@ -70,8 +63,7 @@ public class StoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_story_list, container, false);
-
+        View v = inflater.inflate(R.layout.fragment_story_list, container, false);
 
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
@@ -80,12 +72,14 @@ public class StoryListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         storyRecyclerViewAdapter = new StoryRecyclerViewAdapter(getActivity(), mSection);
         recyclerView.setAdapter(storyRecyclerViewAdapter);
-        storyRecyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){});
-
+        storyRecyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        });
 
         return v;
     }
 
-
+    public void refreshList(){
+        storyRecyclerViewAdapter.notifyDataSetChanged();
+    }
 
 }

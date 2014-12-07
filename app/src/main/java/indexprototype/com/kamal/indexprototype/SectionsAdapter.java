@@ -3,15 +3,20 @@ package indexprototype.com.kamal.indexprototype;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import java.util.List;
+import android.util.Log;
+import android.util.SparseArray;
 
 /**
+ *
+ * POSSIBLE ERRORS:
+ * http://stackoverflow.com/questions/14035090/how-to-get-existing-fragments-when-using-fragmentpageradapter/23843743#23843743
+ *
  * Created by Kamal on 12/5/2014.
  */
 public class SectionsAdapter extends FragmentPagerAdapter {
 
-    private List mListArrayList = StoriesBank.getSections();
+    private SparseArray<StoryListFragment> mSparseArray
+            = new SparseArray<StoryListFragment>();
 
     public SectionsAdapter(FragmentManager fm) {
         super(fm);
@@ -20,21 +25,30 @@ public class SectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        StoryListFragment storyListFragment = null;
         switch(position){
             case(0):
-                return StoryListFragment.newInstance(StoriesBank.NEWS);
+                storyListFragment = StoryListFragment.newInstance(StoriesBank.NEWS);
+                break;
             case(1):
-                return StoryListFragment.newInstance(StoriesBank.FEATURES);
+                storyListFragment = StoryListFragment.newInstance(StoriesBank.FEATURES);
+                break;
             case(2):
-                return StoryListFragment.newInstance(StoriesBank.ARTS);
+                 storyListFragment=  StoryListFragment.newInstance(StoriesBank.ARTS);
+                break;
             case(3):
-                return StoryListFragment.newInstance(StoriesBank.OPINIONS);
+                 storyListFragment = StoryListFragment.newInstance(StoriesBank.OPINIONS);
+                break;
             case(4):
-                return StoryListFragment.newInstance(StoriesBank.SPORTS);
+                 storyListFragment = StoryListFragment.newInstance(StoriesBank.SPORTS);
+                break;
             case(5):
-                return StoryListFragment.newInstance(StoriesBank.BUZZKILL);
+                 storyListFragment =  StoryListFragment.newInstance(StoriesBank.BUZZKILL);
+                break;
         }
-        return null;
+
+        mSparseArray.put(position, storyListFragment);
+        return storyListFragment;
     }
 
     @Override
@@ -61,4 +75,28 @@ public class SectionsAdapter extends FragmentPagerAdapter {
                 return "";
         }
     }
+
+    public StoryListFragment getFragment(int fragmentID){
+        StoryListFragment fragment = mSparseArray.get(fragmentID);
+        return fragment;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        Log.d("SectionsAdapter", "NotifyDataSetChanged");
+    }
+
+    public void refreshFragment(int position){
+        if(getFragment(position)!=null) {
+            getFragment(position).refreshList();
+            Log.d("SectionsAdapter", "Refreshed list " + position);
+        } else {
+
+            Log.d("SectionsAdapter", " List " + position  + " was found to be null.");
+        }
+    }
+
+
+
 }

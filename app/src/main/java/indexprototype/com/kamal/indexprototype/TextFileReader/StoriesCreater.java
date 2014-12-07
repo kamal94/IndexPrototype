@@ -58,16 +58,16 @@ public class StoriesCreater {
         String author = storyString.substring(1, storyString.indexOf("AUTHOR"));
         String title = storyString.substring(storyString.indexOf("..") + 2, storyString.indexOf("TITLE"));
         String content = storyString.substring(storyString.indexOf("...") + 3, storyString.length() - 1);
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
-        StoriesBank.addStory(new Story(null, author, title, content + content, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
+        StoriesBank.addStory(new Story(null, author, title, content + content, null, "", "placeHolder"));
     }
 
     /**

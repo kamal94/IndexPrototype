@@ -38,10 +38,9 @@ public class DataFetcher {
      * specified, and opens those links and creates stories from them using <class>StoryBuilder</class>
      * @return
      */
-	public static boolean run() {
+	public static boolean run(int i) {
         int startingNumOfStories = StoriesBank.howMany();   //records initial number of stories in bank
         //Goes through every section...
-        for(int i=0; i<6; i++){
             switch (i){
                 case 0: section = StoriesBank.NEWS;
                     url = StoriesBank.NEWS_URL;
@@ -80,12 +79,11 @@ public class DataFetcher {
                     doc =   Jsoup.connect(url).get();   //..and opens links to them
                 } catch (SocketTimeoutException e1) {
                     Log.e("DataFetcher", "Connection timed out while accessing " + url + "\nTrying Third time...");
-
                     try {
                         doc =   Jsoup.connect(url).get();   //..and opens links to them
                     } catch (SocketTimeoutException e2) {
                         Log.e("DataGetcher", "Socket timed out for the third time. Aborting!");
-                        break;
+                        return false;
                     } catch (IOException e2){
                         e2.printStackTrace();
                     }
@@ -115,7 +113,6 @@ public class DataFetcher {
 ////                        storyBuilder.addStory(section);
 //                }
 //            }
-        }
 
         //compares final story numbers in bank to inital.
         if(StoriesBank.howMany()>startingNumOfStories)

@@ -31,6 +31,7 @@ public class StoryBuilder {
 	private String mTitle = "";  //The title of the story
 	private Document doc = null;    //The representation of the story website for Jsoup
 	private String imageURL = null; //The URL string of the story's image
+    private String mByline = null;  //The byline of the story as fetched from the gits.
 
     /**
      * Creates a story gist from the element passed to it.
@@ -51,13 +52,18 @@ public class StoryBuilder {
         for(Element ele: title){
             mTitle = ele.text();
         }
+        Elements byline = element.getElementsByAttributeValue("class", "mh-excerpt");
+        for(Element ele: title){
+            mByline = mByline + ele.text();
+        }
+        mByline = byline.text();
         if(ImageContainerDeterminer.containsImage(element.toString())){
             imageURL = ImageContainerDeterminer.getImageURL(element.toString());
         }
 //
 //        Log.d("StoryBuilder", "Story Gist: \n" + "link: " + mURL + "\ntitle: " + mTitle + "\nimageURL : " + imageURL);
 
-        StoriesBank.addStory(new Story(mURL, null, mTitle, null, imageURL, section));
+        StoriesBank.addStory(new Story(mURL, null, mTitle, null, mByline, imageURL, section));
 
         return true;
     }
