@@ -37,8 +37,11 @@ public class StoryReaderActivity extends ActionBarActivity {
 
         new StoryDownloader().execute(story);
         image = (ImageView) findViewById(R.id.story_reader_storyImage);
-        image.setImageDrawable(new BitmapDrawable(getResources(),story.getImageBitmap()));
-
+        if(story.getImageBitmap()!=null)
+            image.setImageDrawable(new BitmapDrawable(getResources(),story.getImageBitmap()));
+        else {
+            image.setImageDrawable(getResources().getDrawable(R.drawable.index_story_default));
+        }
         ViewCompat.setTransitionName(image, TRANSITION_IMAGE_NAME);
         title = (TextView) findViewById(R.id.story_reader_story_title);
         title.setText(story.getTitle());

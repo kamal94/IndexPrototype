@@ -3,4 +3,5 @@
     <color name="primary_color">#FF5722</color>
     <color name="primary_color_dark">#E64A19</color>
     <color name="accent">#ffffffff</color>
+    <!--<color name="story_text_color">#ff0f0f0f</color>-->
 </resources>

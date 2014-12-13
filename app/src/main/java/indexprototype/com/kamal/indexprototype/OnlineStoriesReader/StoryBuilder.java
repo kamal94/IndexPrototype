@@ -124,7 +124,7 @@ public class StoryBuilder {
 		for(Elements elementsCollection: innerElementsArray){
 			for(Element element: elementsCollection){
 				if(element.hasText())
-					mStoryContent += element.ownText() + "\n" + "\t";
+					mStoryContent += element.text() + "\n" + "\t";
 			}
             Log.d("StoryBuilder", "Content read: " + mStoryContent);
 		}

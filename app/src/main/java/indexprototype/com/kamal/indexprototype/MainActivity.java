@@ -8,15 +8,20 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
-import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.ImageDownloadThread;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -24,23 +29,27 @@ public class MainActivity extends ActionBarActivity {
     private SectionsAdapter mSectionsAdapter;
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e("MainActivity", "onCreate called.");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar!=null){
-            setSupportActionBar(toolbar);
-        }
 
+
+        //Sets the toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if(toolbar!=null){setSupportActionBar(toolbar);}
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_dark));
         }
 
+
+//        mDrawerListView = (ListView) findViewById(R.id.main_activity_navigation_drawer);
 
 
         mSectionsAdapter = new SectionsAdapter(getSupportFragmentManager());
@@ -115,8 +124,6 @@ public class MainActivity extends ActionBarActivity {
 
         mSectionsAdapter.notifyDataSetChanged();
         mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
-        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
-//        storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -173,8 +180,12 @@ public class MainActivity extends ActionBarActivity {
 
             runningThread = params[0];
             for(Story story: StoriesBank.getStories()){
-                ImageDownloadThread imageDownloadThread = new ImageDownloadThread(getApplicationContext(), story);
-                imageDownloadThread.run();
+                if(!story.getImageURL().equals(Story.NO_IMAGE))
+                    try {
+                        story.setImageBitmap(Picasso.with(getApplicationContext()).load(story.getImageURL()).get());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
             return null;
         }

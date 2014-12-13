@@ -54,7 +54,7 @@ public class Story {
         if(imageURL!=null)
             mImageURL = imageURL;
         else
-            mImageURL = "http://i0.wp.com/www.thekzooindex.com/wp-mContent/uploads/2014/08/Index-I2.png?resize=70%2C53";
+            mImageURL = "default_Image";
         mSection = section;
     }
 
@@ -158,9 +158,12 @@ public class Story {
 
     /**
      * Returns the image of the story.
-     * @return image    The image of the story.
+     * @return image    The image of the story. If the story does not
+     * have an image URL, null is returned.
      */
     public Bitmap getImageBitmap(){
+        if(this.mImageURL.equals(NO_IMAGE))
+           return null;
         return mImageBitmap;
     }
 

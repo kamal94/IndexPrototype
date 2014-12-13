@@ -76,7 +76,11 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
         Story story = StoriesBank.findByIndex(i, mSection);
         viewHolder.largeText.setText(story.getTitle());
         viewHolder.byline.setText(story.getByline());
-        viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
+        if(story.getImageBitmap()!=null)
+            viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
+        else{
+            viewHolder.image.setImageDrawable(mContext.getResources().getDrawable(R.drawable.index_story_default));
+        }
         viewHolder.id = story.getID();
     }
 
@@ -139,7 +143,6 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
                             (Activity) context, image, StoryReaderActivity.TRANSITION_IMAGE_NAME);
                     ActivityCompat.startActivity((Activity) context , intent,
                             options.toBundle());
-//                    context.startActivity(intent);
                 }
             });
         }
