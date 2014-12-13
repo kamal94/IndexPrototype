@@ -17,6 +17,10 @@ public class Story {
 
     //a public constatnt that signified the lack of cover image for the Story.
     public final static String NO_IMAGE = "NOIMAGE";
+    //the image link to the default story image. If this link is found to be the story's image,
+    //the link is discarded as it points to a low-res image, and a more high-res
+    //default image is set for the story instead.
+    public final static String DEFAULT_IMAGE_URL = "http://www.thekzooindex.com/wp-content/uploads/2014/12/Index-Social-Media-Filler-Thumbnail-174x131.png";
 
     //private instance variables
     private String title;
@@ -51,10 +55,10 @@ public class Story {
             mByline=byline;
         } else
             mByline = "No byline";
-        if(imageURL!=null)
+        if(imageURL!=null && !imageURL.equals(DEFAULT_IMAGE_URL))
             mImageURL = imageURL;
         else
-            mImageURL = "default_Image";
+            mImageURL = NO_IMAGE;
         mSection = section;
     }
 

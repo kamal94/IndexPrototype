@@ -53,7 +53,7 @@ public class StoryReaderActivity extends ActionBarActivity {
         author.setText(story.getAuthor());
 
         content = (TextView) findViewById(R.id.story_reader_story_content);
-//        content.setText(story.getContent());
+        content.setText(story.getContent());
 
     }
 
