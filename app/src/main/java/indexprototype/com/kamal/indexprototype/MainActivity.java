@@ -1,42 +1,51 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-
-import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
-
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ContactUs.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener{
 
     private SectionsAdapter mSectionsAdapter;
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
+    private boolean downloadingData;
+    private FragmentManager mFragmentManager;
+    private Bundle mFragmentManagementBundle;
+    private android.support.v4.app.Fragment homeFragment;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.e("MainActivity", "onCreate called.");
+
+        mFragmentManager = getSupportFragmentManager();
+
+        //Sets the beginning fragment
+        homeFragment = (android.support.v4.app.Fragment) new HomeFragment();
+        mFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, homeFragment, HomeFragment.TAG)
+                .commit();
 
 
         //Sets the toolbar
@@ -48,33 +57,31 @@ public class MainActivity extends ActionBarActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_dark));
         }
 
+        //Sets the drawer
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.main_atctivity_drawer_layout);
+        mDrawerListView = (ListView) findViewById(R.id.main_activity_drawer_listview);
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation_drawer_string_array)));
+        mDrawerListView.setOnItemClickListener(new NavigationDrawerListener());
 
-//        mDrawerListView = (ListView) findViewById(R.id.main_activity_navigation_drawer);
 
-
-        mSectionsAdapter = new SectionsAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.main_activity_view_pager);
-        mViewPager.setAdapter(mSectionsAdapter);
-
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.main_activity_sliding_tabs);
-        mSlidingTabLayout.setCustomTabView(R.layout.scroll_tab, R.id.scroll_tab_text_view);
-        mSlidingTabLayout.setViewPager(mViewPager);
-        mSlidingTabLayout.setCustomTabColorizer(new CustomSlidingTabColors());
-        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.primary_color));
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if(networkInfo!= null && networkInfo.isConnected()) {
-            for (int i = 0; i < 6; i++) {
-                new DownloadData().execute(i);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.accessibility_drawer_open, R.string.accessibility_drawer_close){
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                setTitle("The Index");
             }
 
-            for (int i = 0; i < 6; i++) {
-                new DownloadStoryImages().execute(i);
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                setTitle("Options");
             }
-        } else {
-            Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
-        }
+
+        };
+        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
 
     }
 
@@ -108,6 +115,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        mFragmentManager.popBackStack();
+        return true;
+    }
+
     /**
      * A STUB method to indicate the clicking of the settings button/icon
      * on the main activity
@@ -132,68 +145,57 @@ public class MainActivity extends ActionBarActivity {
     private void actionBarRemoveClicked(){
         StoriesBank.clear();
         mSectionsAdapter.notifyDataSetChanged();
+        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
     /**
-     * A class that runs the download for the stories from the internet on a separate thread.
+     * Created by Kamal on 12/13/2014.
      */
-    private class DownloadData extends AsyncTask<Integer, Integer, Boolean>{
+    public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
 
-        private int runningThread;
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            runningThread = params[0];
-            return DataFetcher.run(params[0]);
-        }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                mSectionsAdapter.notifyDataSetChanged();
-                mSectionsAdapter.refreshFragment(runningThread);
-                Log.d("MainActivity", "running thread: " + runningThread);
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch(position){
+                case(0):
+                    homeChosen();
+                    Log.d("MainActivity", "Home fragment inflation called");
+                    break;
+                case(1):
+                    contactUsChoosen();
+                    Log.d("MainActivity", "ContactUS fragment inflation called");
+                    break;
             }
         }
-    }
 
 
-    /**
-     * A class that downloads images of stories.
-     */
-    private class DownloadStoryImages extends AsyncTask<Integer, Integer, Boolean>{
-
-        private int runningThread;
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-
-            runningThread = params[0];
-            for(Story story: StoriesBank.getStories()){
-                if(!story.getImageURL().equals(Story.NO_IMAGE))
-                    try {
-                        story.setImageBitmap(Picasso.with(getApplicationContext()).load(story.getImageURL()).get());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
-            return null;
+        public void homeChosen(){
+//            mFragmentManager.beginTransaction()
+//                    .replace(R.id.fragment_container, homeFragment)
+//                    .commit();
+            mFragmentManager.popBackStack();
+            getSupportActionBar().setTitle("The Index");
+            mDrawerLayout.closeDrawers();
         }
 
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            mSectionsAdapter.notifyDataSetChanged();
-            mSectionsAdapter.refreshFragment(runningThread);
+        public void contactUsChoosen(){
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            android.support.v4.app.Fragment fragment = new ContactUs();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment, ContactUs.FRAGMENT_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            getSupportActionBar().setTitle("Contact Us");
+            mDrawerLayout.closeDrawers();
+            Log.d("MainActivity", "Contact us fragment commited");
         }
     }
 }

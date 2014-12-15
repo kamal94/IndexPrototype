@@ -11,5 +11,8 @@
     <string name="title_section3">Section 3</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="scroll_tab">scroll tab</string>
+    <string name="accessibility_drawer_open">Open Drawer</string>
+    <string name="accessibility_drawer_close">Close Drawer</string>
+
 
 </resources>
