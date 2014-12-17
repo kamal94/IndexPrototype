@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
+import indexprototype.com.kamal.indexprototype.StorageManager.LoadingManager;
 
 
 /**
@@ -78,6 +79,9 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        LoadingManager loadingManager = new LoadingManager(getActivity().getApplicationContext());
+        loadingManager.loadStories();
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -186,7 +190,7 @@ public class HomeFragment extends Fragment {
 
             runningThread = params[0];
             for(Story story: StoriesBank.getStories()){
-                if(!story.getImageURL().equals(Story.NO_IMAGE))
+                if(!story.getImageURL().equals(Story.DEFAULT_IMAGE_URL))
                     try {
                         story.setImageBitmap(Picasso.with(getActivity().getApplicationContext()).load(story.getImageURL()).get());
                     } catch (IOException e) {
