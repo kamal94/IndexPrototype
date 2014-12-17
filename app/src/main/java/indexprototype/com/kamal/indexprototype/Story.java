@@ -26,7 +26,7 @@ public class Story {
     public final static String DEFAULT_IMAGE_URL = "http://www.thekzooindex.com/wp-content/uploads/2014/12/Index-Social-Media-Filler-Thumbnail-174x131.png";
 
     //private instance variables
-    private String title;
+    private String mTitle;
     private String mStoryURL;
     private UUID ID;
     private String mContent;
@@ -42,9 +42,9 @@ public class Story {
         else
             mStoryURL = "No URL";
         if(Title!=null)
-            title = Title.trim();
+            mTitle = Title.trim();
         else
-            title = "No title";
+            mTitle = "No mTitle";
         if(Author!=null)
             author = Author.trim();
         else
@@ -66,11 +66,11 @@ public class Story {
     }
 
     /**
-     * Returns the title of the story.
-     * @return title    The title of the story.
+     * Returns the mTitle of the story.
+     * @return mTitle    The mTitle of the story.
      */
     public String getTitle(){
-        return title;
+        return mTitle;
     }
 
     /**
@@ -188,12 +188,23 @@ public class Story {
      */
     public String toString(){
         String string = "";
-        string += "title: " +title + "\n";
+        string += "mTitle: " + mTitle + "\n";
         string += "author: " + author + "\n";
         string += "Image: " + mImageURL + "\n";
         string += "mContent: " + mContent + "\n";
 
         return string;
+    }
+
+    /**
+     * Removes spaces and path separating characters from the story's title.
+     * @return title The story's title without spaces or path separators.
+     */
+    public String getCondensedTitle(){
+        String title = mTitle.replaceAll("\\s+", "")
+                .replaceAll("/",".")
+                .trim();
+        return title;
     }
 
     public JSONObject toJSON() throws JSONException {

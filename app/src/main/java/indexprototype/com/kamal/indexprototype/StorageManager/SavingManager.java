@@ -79,7 +79,7 @@ public class SavingManager {
 
         Writer writer = null;
         try {
-            filename = story.getTitle().replaceAll("\\s+", "").replaceAll("/",".").trim();
+            filename = story.getCondensedTitle();
             File storyFile = new File(storiesFile, filename);
             storyFile.mkdir();
 

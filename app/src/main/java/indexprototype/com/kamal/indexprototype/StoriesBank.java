@@ -1,7 +1,8 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.util.Log;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,13 @@ import java.util.UUID;
  * manages their sorting and access.
  *
  * IMPORTANT NOTES:
+ *
+ * Modifications:
+ *
+ * 12/16/2014   Kamalaldin Kamalaldin   Added searching by title functionality.
+ *                                      Disallowed duplicates in the database by checking
+ *                                      the title of the story when adding into the database
+ *                                      [see addStory(Story)]
  *
  *
  *
@@ -49,11 +57,18 @@ public class StoriesBank {
      * @param story The story to be added to the database
      * @return  boolean True if the story was added to the database and to the
      * respective section of the story. False if the story was not added to either
-     * of the banks. The story is deleted from the central story bank if false is returned.
+     * t the bank or a section. False is also returned if the story is a duplicate of an
+     * already existing story. Duplicates are compared using the story's condensed title
+     * [see Story.getCondensedTitle()]
+     * The story is deleted from the central story bank if false is returned.
      *
      */
     public static boolean addStory(Story story) {
         int progress = 0;
+        if(findByTitle(story.getCondensedTitle())!=null) {
+            Log.e("StoriesBank", "Duplicate found with title: " + story.getTitle());
+            return false;
+        }
         if(stories.add(story))
             progress++;
         switch (story.getSection()){
@@ -127,6 +142,23 @@ public class StoriesBank {
     }
 
     /**
+     * Searches the database and returns the story with the same title. If no such story exists
+     * in the database, null is returned.
+     * @param condensedTitle    The condensed title of the story, returned by the getCondensedTitle
+     *                          method.
+     * @return story            The story with the passed title. If no story with the title exists
+     *                          in the database, null is returned.
+     */
+    public static Story findByTitle(String condensedTitle){
+
+        for(Story story: stories){
+            if(story.getCondensedTitle().equals(condensedTitle))
+                return story;
+        }
+        return null;
+    }
+
+    /**
      * Finds the story in the bank with the story index.
      * Used mainly for the <Code>StoryRecyclerViewAdaoter</Code> to
      * keep the cards and stories insynch.
@@ -172,13 +204,11 @@ public class StoriesBank {
         }
     }
 
+    /**
+     * Deletes all the stories in the database.
+     */
     public static void clear(){
-        Iterator<Story> itr = stories.iterator();
-        while(itr.hasNext()){
-            itr.next();
-            itr.remove();
-        }
-
+        stories.clear();
     }
 
     /**
