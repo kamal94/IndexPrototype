@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,9 +13,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import indexprototype.com.kamal.indexprototype.StorageManager.SavingManager;
@@ -24,15 +26,10 @@ import indexprototype.com.kamal.indexprototype.StorageManager.SavingManager;
 
 public class MainActivity extends ActionBarActivity implements ContactUs.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener{
 
-    private SectionsAdapter mSectionsAdapter;
-    private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTabLayout;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
-    private boolean downloadingData;
     private FragmentManager mFragmentManager;
-    private Bundle mFragmentManagementBundle;
-    private android.support.v4.app.Fragment homeFragment;
+    private HomeFragment homeFragment;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     @Override
@@ -45,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
 
         //Sets the beginning fragment
-        homeFragment = (android.support.v4.app.Fragment) new HomeFragment();
+        homeFragment =  new HomeFragment();
         mFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, homeFragment, HomeFragment.TAG)
                 .commit();
@@ -63,7 +60,25 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         //Sets the drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_atctivity_drawer_layout);
         mDrawerListView = (ListView) findViewById(R.id.main_activity_drawer_listview);
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation_drawer_string_array)));
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation_drawer_string_array)){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View choiceView = getLayoutInflater().inflate(R.layout.navigation_drawer_list_view_item, parent, false);
+                ImageView choiceIcon = (ImageView) choiceView.findViewById(R.id.navigation_drawer_list_view_item_icon);
+                TextView choiceText = (TextView) choiceView.findViewById(R.id.navigation_drawer_list_view_item_text_view);
+                switch (position){
+                    case(0):
+                        choiceIcon.setImageDrawable(getResources().getDrawable(R.drawable.index_story_default));
+                        choiceText.setText(this.getItem(position));
+                        break;
+                    case(1):
+                        choiceIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_email));
+                        choiceText.setText(this.getItem(position));
+                        break;
+                }
+                return choiceView;
+            }
+        });
         mDrawerListView.setOnItemClickListener(new NavigationDrawerListener());
 
 
@@ -79,7 +94,6 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
                 super.onDrawerOpened(drawerView);
                 setTitle("Options");
             }
-
         };
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -137,9 +151,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
      * on the main activity
      */
     private void actionBarRefreshClicked(){
-
-        mSectionsAdapter.notifyDataSetChanged();
-        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
+        homeFragment.refreshStories();
     }
 
     /**
@@ -147,13 +159,11 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
      */
     private void actionBarRemoveClicked(){
         StoriesBank.clear();
-        mSectionsAdapter.notifyDataSetChanged();
-        mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
+        homeFragment.refreshStories();
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
