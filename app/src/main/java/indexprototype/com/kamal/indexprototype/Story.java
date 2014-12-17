@@ -2,6 +2,9 @@ package indexprototype.com.kamal.indexprototype;
 
 import android.graphics.Bitmap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.UUID;
 
 /**
@@ -16,7 +19,7 @@ import java.util.UUID;
 public class Story {
 
     //a public constatnt that signified the lack of cover image for the Story.
-    public final static String NO_IMAGE = "NOIMAGE";
+//    public final static String NO_IMAGE = "NOIMAGE";
     //the image link to the default story image. If this link is found to be the story's image,
     //the link is discarded as it points to a low-res image, and a more high-res
     //default image is set for the story instead.
@@ -58,7 +61,7 @@ public class Story {
         if(imageURL!=null && !imageURL.equals(DEFAULT_IMAGE_URL))
             mImageURL = imageURL;
         else
-            mImageURL = NO_IMAGE;
+            mImageURL = DEFAULT_IMAGE_URL;
         mSection = section;
     }
 
@@ -166,7 +169,7 @@ public class Story {
      * have an image URL, null is returned.
      */
     public Bitmap getImageBitmap(){
-        if(this.mImageURL.equals(NO_IMAGE))
+        if(this.mImageURL.equals(DEFAULT_IMAGE_URL))
            return null;
         return mImageBitmap;
     }
@@ -192,4 +195,30 @@ public class Story {
 
         return string;
     }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(JSON_BYLINE, getByline());
+        jsonObject.put(JSON_STORY_URL, getStoryURL());
+        jsonObject.put(JSON_AUTHOR, getAuthor());
+        jsonObject.put(JSON_CONTENT, getContent());
+        jsonObject.put(JSON_TITLE, getTitle());
+        jsonObject.put(JSON_ID, getID());
+        jsonObject.put(JSON_IMAGE_URL, getImageURL());
+        jsonObject.put(JSON_SECTION, getSection());
+
+        return jsonObject;
+    }
+
+    public static final String JSON_STORY_URL = "JSONSTORYURL";
+    public static final String JSON_TITLE = "JSONTITLE";
+    public static final String JSON_AUTHOR = "JSONAUTHOR";
+    public static final String JSON_ID = "JSONID";
+    public static final String JSON_CONTENT = "JSONOCONTENT";
+    public static final String JSON_BYLINE = "JSONBYLINE";
+    public static final String JSON_IMAGE_URL = "JSONIMAGEURL";
+    public static final String JSON_IMAGE_BITMAP = "JSONBITMAP";
+    public static final String JSON_SECTION = "JSONSECTION";
+//    public static final String JSON_ = "JSON"
+//    public static final String JSON_ = "JSON"
 }

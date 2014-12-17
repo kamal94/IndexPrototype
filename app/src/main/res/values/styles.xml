@@ -18,7 +18,6 @@
         <item name="windowActionBar">false</item>
     </style>
 
-
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/primary_color</item>
         <item name="background">@color/primary_color</item>

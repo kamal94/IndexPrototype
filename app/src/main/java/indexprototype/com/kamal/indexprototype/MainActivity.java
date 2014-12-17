@@ -19,6 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import indexprototype.com.kamal.indexprototype.StorageManager.SavingManager;
+
 
 public class MainActivity extends ActionBarActivity implements ContactUs.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener{
 
@@ -40,6 +42,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         Log.e("MainActivity", "onCreate called.");
 
         mFragmentManager = getSupportFragmentManager();
+        getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
 
         //Sets the beginning fragment
         homeFragment = (android.support.v4.app.Fragment) new HomeFragment();
@@ -153,7 +156,12 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
 
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SavingManager savingManager = new SavingManager(getApplicationContext());
+        savingManager.saveStoriesToMemory(StoriesBank.getStories());
+    }
 
     /**
      * Created by Kamal on 12/13/2014.
