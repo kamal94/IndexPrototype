@@ -5,9 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONException;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,7 +44,7 @@ public class LoadingManager {
      */
     public boolean loadStories(){
         boolean success = true;
-        File pathFile= mContext.getDir(SavingManager.STORIES_FILE_PATH, Context.MODE_PRIVATE);
+        File pathFile= mContext.getDir(SavingManager.STORIES_FILE_PATH, Context.MODE_APPEND);
         File[] storiesFilePath = pathFile.listFiles();
         Log.d("LoadingManager", "Stories file path: " + pathFile.toString());
         String paths = "";
@@ -63,8 +62,13 @@ public class LoadingManager {
                 try {
                     InputStream inputStream = new FileInputStream(file.getPath()+"/story");
                     reader = new BufferedReader(new InputStreamReader(inputStream));
-                    JSONParser jsonParser = new JSONParser();
-                    JSONObject storyJSON = (JSONObject) jsonParser.parse(reader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine())!=null){
+                        stringBuilder.append(line);
+                    }
+                    Log.d("LoadingManager", "JSON story: " + stringBuilder.toString());
+                    org.json.JSONObject storyJSON = (org.json.JSONObject) new JSONTokener(stringBuilder.toString()).nextValue();
                     Log.d("LoadingManager", "Json Object: " + storyJSON.toString());
                     Story story = new Story((String) storyJSON.get(Story.JSON_STORY_URL),
                             (String) storyJSON.get(Story.JSON_AUTHOR),
@@ -91,7 +95,7 @@ public class LoadingManager {
                     Log.e("LoadingManager", "Could not read file " + file.toString());
                     e.printStackTrace();
                     success = false;
-                } catch (ParseException e) {
+                } catch (JSONException e) {
                     Log.e("LoadingManager", "Could not read file " + file.toString());
                     e.printStackTrace();
                     success = false;

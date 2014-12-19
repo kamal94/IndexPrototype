@@ -25,6 +25,9 @@ public class SectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+
+        if(mSparseArray.get(position)!=null)
+            return mSparseArray.get(position);
         StoryListFragment storyListFragment = null;
         switch(position){
             case(0):
@@ -76,8 +79,13 @@ public class SectionsAdapter extends FragmentPagerAdapter {
         }
     }
 
-    public StoryListFragment getFragment(int fragmentID){
-        StoryListFragment fragment = mSparseArray.get(fragmentID);
+    /**
+     * Returns the fragment at the indicated position of the
+     * @param fragmentPosition
+     * @return
+     */
+    public StoryListFragment getFragment(int fragmentPosition){
+        StoryListFragment fragment = mSparseArray.get(fragmentPosition);
         return fragment;
     }
 

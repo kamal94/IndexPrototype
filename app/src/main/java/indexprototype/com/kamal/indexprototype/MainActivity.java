@@ -235,7 +235,7 @@ STORY ADAPTER IF NEEDED
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView ==null){
-                convertView = View.inflate(getApplicationContext(),R.layout.story_list_view, null);
+                convertView = View.inflate(getApplicationContext(),R.layout.story_list_view_item, null);
             }
             Story story = getItem(position);
 

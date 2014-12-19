@@ -48,13 +48,15 @@ public class SavingManager {
      * False if any story was not saved successfully.
      */
     public boolean saveStoriesToMemory(List<Story> storiesList){
-        boolean success = true;
+        boolean allSuccess = true;
         for(Story story: storiesList){
-            if(!saveStory(story))
-                success= false;
+            boolean oneSucess = saveStory(story);
+            if (!oneSucess)
+                allSuccess = false;
+            Log.d("SavingManager",  story.getTitle() + " was saved: " + oneSucess);
         }
 
-        return success;
+        return allSuccess;
     }
 
 
@@ -67,7 +69,7 @@ public class SavingManager {
      */
     private boolean saveStory(Story story){
         String filename = "";
-        File storiesFile = mContext.getDir("Stories", Context.MODE_PRIVATE);
+        File storiesFile = mContext.getDir("Stories", Context.MODE_APPEND);
         JSONObject storyJson;
         try {
             storyJson = story.toJSON();
@@ -81,7 +83,8 @@ public class SavingManager {
         try {
             filename = story.getCondensedTitle();
             File storyFile = new File(storiesFile, filename);
-            storyFile.mkdir();
+            if(!storyFile.mkdir())
+                return false;
 
             File jsonStoryFile = new File(storyFile, "story");
 

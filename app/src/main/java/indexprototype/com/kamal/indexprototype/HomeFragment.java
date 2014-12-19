@@ -9,8 +9,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ import indexprototype.com.kamal.indexprototype.StorageManager.LoadingManager;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,29 +46,12 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
 
-    private SectionsAdapter mSectionsAdapter;
-    private ViewPager mViewPager;
+    private static SectionsAdapter mSectionsAdapter;
+    private static ViewPager mViewPager;
+    private StoriesSwipeToRefreshLayout swipeRefreshLayout;
     private SlidingTabLayout mSlidingTabLayout;
 
     private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -101,10 +86,32 @@ public class HomeFragment extends Fragment {
 
 
 
+        //Sets the ViewPager and the Adapter for it.
         mSectionsAdapter = new SectionsAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) v.findViewById(R.id.home_fragment_view_pager);
         mViewPager.setAdapter(mSectionsAdapter);
+        //This listener implements an important override that prevents the
+        //SwipeRefreshLayout(see below) from stealing the vertical operations
+        //of the fragment inside the ViewPager. It simply disables the SwipeRefreshLayout
+        //once the user decides to do anything but swipe-down/move-up in the screen.
+        mViewPager.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                swipeRefreshLayout.setEnabled(false);
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                        swipeRefreshLayout.setEnabled(true);}
+                return false;
+            }
+        });
 
+        //Sets the Swipe down to refresh layout
+        swipeRefreshLayout = (StoriesSwipeToRefreshLayout) v.findViewById(R.id.home_fragment_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setAdapterAndViewPager(mSectionsAdapter, mViewPager);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.primary_color));
+        swipeRefreshLayout.requestDisallowInterceptTouchEvent(true);
+
+        //Sets the Sliding tab layout
         mSlidingTabLayout = (SlidingTabLayout) v.findViewById(R.id.home_fragment_sliding_tabs);
         mSlidingTabLayout.setCustomTabView(R.layout.scroll_tab, R.id.scroll_tab_text_view);
         mSlidingTabLayout.setViewPager(mViewPager);
@@ -145,6 +152,13 @@ public class HomeFragment extends Fragment {
         mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
     }
 
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        refreshStories();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -161,6 +175,7 @@ public class HomeFragment extends Fragment {
 
 
     }
+
 
     /**
      * A class that runs the download for the stories from the internet on a separate thread.

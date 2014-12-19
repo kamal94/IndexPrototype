@@ -82,4 +82,8 @@ public class StoryListFragment extends Fragment {
         storyRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    public RecyclerView getRecyclerView(){
+        return recyclerView;
+    }
+
 }

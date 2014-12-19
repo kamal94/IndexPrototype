@@ -30,28 +30,6 @@
             ></FrameLayout>
     </LinearLayout>
 
-    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-                  <!--xmlns:tools="http://schemas.android.com/tools"-->
-                  <!--android:id="@+id/main_Activity"-->
-                  <!--android:layout_width="match_parent"-->
-                  <!--android:layout_height="match_parent"-->
-                  <!--android:orientation="vertical"-->
-                  <!--tools:context=".MainActivity">-->
-
-
-        <!--<indexprototype.com.kamal.indexprototype.SlidingTabLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/main_activity_sliding_tabs">-->
-        <!--</indexprototype.com.kamal.indexprototype.SlidingTabLayout>-->
-
-
-        <!--<android.support.v4.view.ViewPager android:id="@+id/main_activity_view_pager"-->
-                                           <!--android:layout_width="match_parent"-->
-                                           <!--android:layout_height="0dp"-->
-                                           <!--android:layout_weight="1"/>-->
-    <!--</LinearLayout>-->
-
     <LinearLayout
         android:layout_width="280dp"
         android:layout_height="match_parent"
@@ -62,6 +40,11 @@
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:orientation="horizontal"
+            />
+        <LinearLayout   android:id="@+id/main_activity_drawer_component_top_title_spacer"
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:orientation="horizontal"
             />
         <LinearLayout android:id="@+id/main_activity_drawer_component_main_title"
             android:layout_width="match_parent"
@@ -85,6 +68,13 @@
                 android:fontFamily="century"
                 android:textColor="#ff000000"
                 android:textSize="8sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="4dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ffb6b6b6"/>
             </LinearLayout>
 
         <ListView android:id="@+id/main_activity_drawer_listview"
