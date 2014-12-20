@@ -1,6 +1,8 @@
 package indexprototype.com.kamal.indexprototype.StorageManager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -76,13 +78,14 @@ public class LoadingManager {
                             (String) storyJSON.get(Story.JSON_IMAGE_URL),
                             (String) storyJSON.get(Story.JSON_SECTION)
                     );
-//                    if(!story.getImageURL().equals(Story.DEFAULT_IMAGE_URL)){
-//
-////                        inputStream = new FileInputStream(file.getPath()+"/image");
-////                        reader = new BufferedReader(new InputStreamReader(inputStream));
-//                        Bitmap storyImage = BitmapFactory.decodeFile(file.getPath()+"/image");
-//                        story.setImageBitmap(storyImage);
-//                    }
+                    if(!story.getImageURL().equals(Story.DEFAULT_IMAGE_URL)){
+
+                        File storyImageFile = new File(file, SavingManager.STORY_IMAGE_FILE_NAME);
+//                        inputStream = new FileInputStream(file.getPath()+"/image");
+//                        reader = new BufferedReader(new InputStreamReader(inputStream));
+                        Bitmap storyImage = BitmapFactory.decodeFile(storyImageFile.getPath());
+                        story.setImageBitmap(storyImage);
+                    }
                     StoriesBank.addStory(story);
                     Log.d("LoadingManager", "Story loaded successfully: " + story.toString());
                 } catch (FileNotFoundException e) {

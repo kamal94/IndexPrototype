@@ -1,6 +1,7 @@
 package indexprototype.com.kamal.indexprototype.StorageManager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -89,6 +90,10 @@ public class SavingManager {
             writer = new OutputStreamWriter(outputStream);
             writer.write(JSONstory.toString());
 
+            if(story.hasImage() && story.getImageBitmap()!=null){
+                story.getImageBitmap().compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(new File(storyFile, STORY_IMAGE_FILE_NAME)));
+            }
+
 
         } catch (JSONException e) {
             Log.e("SavingManager", "The file was unable to be created");
@@ -120,5 +125,6 @@ public class SavingManager {
 
     public final static String STORIES_FILE_PATH = "Stories";
     public final static String STORY_FILE_NAME = "story";
+    public final static String STORY_IMAGE_FILE_NAME = "image";
 
 }
