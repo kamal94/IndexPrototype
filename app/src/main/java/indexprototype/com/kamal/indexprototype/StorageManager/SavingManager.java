@@ -16,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
+import indexprototype.com.kamal.indexprototype.StoriesBank;
 import indexprototype.com.kamal.indexprototype.Story;
 
 /**
@@ -48,6 +49,8 @@ public class SavingManager {
      * False if any story was not saved successfully.
      */
     public boolean saveStoriesToMemory(List<Story> storiesList){
+        Log.d("SavingManager", "Stories in database: " );
+        StoriesBank.printStories();
         boolean allSuccess = true;
         for(Story story: storiesList){
             boolean oneSucess = saveStory(story);
@@ -68,41 +71,35 @@ public class SavingManager {
      * if any errors were encountered.
      */
     private boolean saveStory(Story story){
-        String filename = "";
-        File storiesFile = mContext.getDir("Stories", Context.MODE_APPEND);
-        JSONObject storyJson;
-        try {
-            storyJson = story.toJSON();
-        } catch (JSONException e) {
-            Log.e("SavingManager", "Story could not be converted to JSONObject");
-            e.printStackTrace();
-            return false;
-        }
 
         Writer writer = null;
+
         try {
-            filename = story.getCondensedTitle();
-            File storyFile = new File(storiesFile, filename);
-            if(!storyFile.mkdir())
-                return false;
+            JSONObject JSONstory = story.toJSON();
+            File storiesFile = mContext.getDir(STORIES_FILE_PATH, Context.MODE_APPEND);
+            File storyFile = new File(storiesFile, story.getCondensedTitle());
+            boolean createdDirectory = storyFile.mkdir();
+            Log.d("SavingManager", "Directory " + storyFile + " was created with success: " + createdDirectory);
 
-            File jsonStoryFile = new File(storyFile, "story");
+            File storyJSONFile = new File(storyFile, STORY_FILE_NAME);
+//            createdDirectory = storyJSONFile.mkdir();
+//            Log.d("SavingManager", "Directory " + storyJSONFile + " was created with success: " + createdDirectory);
 
-            OutputStream storyOutputStream = new FileOutputStream(jsonStoryFile);
-            writer = new OutputStreamWriter(storyOutputStream);
-            writer.write(storyJson.toString());
+            OutputStream outputStream = new FileOutputStream(storyJSONFile);
+            writer = new OutputStreamWriter(outputStream);
+            writer.write(JSONstory.toString());
 
-            if(story.getImageBitmap()!=null) {
-                File storyImageFile = new File(storyFile,"image");
-                OutputStream imageOutputStream = new FileOutputStream(storyImageFile);
-                writer = new OutputStreamWriter(imageOutputStream);
-                writer.write(story.getImageBitmap().toString());
-            }
+
+        } catch (JSONException e) {
+            Log.e("SavingManager", "The file was unable to be created");
+            e.printStackTrace();
+            return false;
         } catch (FileNotFoundException e) {
             Log.e("SavingManager", "The file was unable to be created");
             e.printStackTrace();
             return false;
         } catch (IOException e) {
+            Log.e("SavingManager", "The file was unable to be created");
             e.printStackTrace();
             return false;
         } finally {
@@ -111,15 +108,17 @@ public class SavingManager {
                     writer.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return false;
                 }
         }
-
-        Log.d("SavingManager", "Story saved to file " + mContext.getFilesDir() + "/" + STORIES_FILE_PATH + "/" + filename + " successfully.");
+//        Log.e("SavingManager", "The file was unable to be created");
+//        e.printStackTrace();
+//        return false;
+//        Log.d("SavingManager", "Story saved to file " + mContext.getFilesDir() + "/" + STORIES_FILE_PATH + "/" + filename + " successfully.");
         return true;
     }
 
 
     public final static String STORIES_FILE_PATH = "Stories";
+    public final static String STORY_FILE_NAME = "story";
 
 }

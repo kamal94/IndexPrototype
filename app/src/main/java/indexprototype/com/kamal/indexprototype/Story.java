@@ -66,6 +66,14 @@ public class Story {
     }
 
     /**
+     * Returns whether the story has an image, or if it's imageURL
+     * points to the default image.
+     * @return boolean True if the story has an image, false if it does not.
+     */
+    public boolean hasImage(){
+        return (!mImageURL.equals(DEFAULT_IMAGE_URL));
+    }
+    /**
      * Returns the mTitle of the story.
      * @return mTitle    The mTitle of the story.
      */

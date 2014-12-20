@@ -224,7 +224,6 @@ public class StoriesBank {
      */
     public static void printStories(){
         for(Story story: stories){
-            if (story.hasContent())
                 System.out.println(story.toString());
         }
     }
