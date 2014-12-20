@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import indexprototype.com.kamal.indexprototype.StorageManager.SavingManager;
+import indexprototype.com.kamal.indexprototype.StorageManager.StorageManager;
 
 
 public class MainActivity extends ActionBarActivity implements ContactUs.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener{
@@ -116,7 +116,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml..
-        int id = item.getItemId();
+//        int id = item.getItemId();
         switch(item.getItemId()){
             case R.id.action_bar_settings:
                 actionBarSettingsClicked();
@@ -169,8 +169,8 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
     @Override
     protected void onPause() {
         super.onPause();
-        SavingManager savingManager = new SavingManager(getApplicationContext());
-        savingManager.saveStoriesToMemory(StoriesBank.getStories());
+        StorageManager storageManager = new StorageManager(getApplicationContext());
+        storageManager.saveStoriesToMemory(StoriesBank.getStories());
     }
 
     /**

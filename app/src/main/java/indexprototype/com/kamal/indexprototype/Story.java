@@ -209,10 +209,9 @@ public class Story {
      * @return title The story's title without spaces or path separators.
      */
     public String getCondensedTitle(){
-        String title = mTitle.replaceAll("\\s+", "")
+        return mTitle.replaceAll("\\s+", "")
                 .replaceAll("/",".")
                 .trim();
-        return title;
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -229,6 +228,24 @@ public class Story {
         return jsonObject;
     }
 
+    /**
+     * Parses a <Class>JSONObject</Class> and returns a <Class>Story</Class>.
+     * @param JSONStory A JSONObject that represents a Story.
+     * @return  Story   The story parsed from the JSONObject
+     * @throws JSONException    If the JSONObject does not correctly represent a
+     * <Class>Story</Class>.
+     */
+    public static  Story getStory(JSONObject JSONStory) throws JSONException {
+        return new Story((String) JSONStory.get(Story.JSON_STORY_URL),
+                (String) JSONStory.get(Story.JSON_AUTHOR),
+                (String) JSONStory.get(Story.JSON_TITLE),
+                (String) JSONStory.get(Story.JSON_CONTENT),
+                (String) JSONStory.get(Story.JSON_BYLINE),
+                (String) JSONStory.get(Story.JSON_IMAGE_URL),
+                (String) JSONStory.get(Story.JSON_SECTION)
+        );
+    }
+
     public static final String JSON_STORY_URL = "JSONSTORYURL";
     public static final String JSON_TITLE = "JSONTITLE";
     public static final String JSON_AUTHOR = "JSONAUTHOR";
@@ -236,7 +253,6 @@ public class Story {
     public static final String JSON_CONTENT = "JSONOCONTENT";
     public static final String JSON_BYLINE = "JSONBYLINE";
     public static final String JSON_IMAGE_URL = "JSONIMAGEURL";
-    public static final String JSON_IMAGE_BITMAP = "JSONBITMAP";
     public static final String JSON_SECTION = "JSONSECTION";
 //    public static final String JSON_ = "JSON"
 //    public static final String JSON_ = "JSON"

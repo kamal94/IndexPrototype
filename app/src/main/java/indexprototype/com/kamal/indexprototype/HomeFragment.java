@@ -22,7 +22,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
-import indexprototype.com.kamal.indexprototype.StorageManager.LoadingManager;
+import indexprototype.com.kamal.indexprototype.StorageManager.StorageManager;
 
 
 /**
@@ -30,8 +30,6 @@ import indexprototype.com.kamal.indexprototype.StorageManager.LoadingManager;
  * Activities that contain this fragment must implement the
  * {@link HomeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -65,7 +63,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        LoadingManager loadingManager = new LoadingManager(getActivity().getApplicationContext());
+        StorageManager loadingManager = new StorageManager(getActivity().getApplicationContext());
         loadingManager.loadStories();
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
