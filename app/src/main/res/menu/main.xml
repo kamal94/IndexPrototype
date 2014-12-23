@@ -2,17 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
-    <item android:id="@+id/action_bar_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_settings"/>
+    <!--<item android:id="@+id/action_bar_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:icon="@drawable/ic_action_settings"/>-->
     <item android:id="@+id/action_bar_refresh_feed"
         android:title="Refresh"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_refresh"/>
-    <item android:id="@+id/action_bar_remove_feed"
-        android:title="Remove"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_remove"/>
+    <!--<item android:id="@+id/action_bar_remove_feed"-->
+        <!--android:title="Remove"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--android:icon="@drawable/ic_action_remove"/>-->
 </menu>

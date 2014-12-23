@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">IndexPrototype</string>
+    <string name="app_name">The Index</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_story_reader">StoryReaderActivity</string>
@@ -13,6 +13,16 @@
     <string name="scroll_tab">scroll tab</string>
     <string name="accessibility_drawer_open">Open Drawer</string>
     <string name="accessibility_drawer_close">Close Drawer</string>
+    <string name="fragment_send_feedback_button_text">Send</string>
+    <string name="fragment_send_feedback_guidelines_and_instructions" color="@color/accent">
+       Here are a few thoughts to start you thinking\n
+       1. What do you absolutely love seeing?\n
+       2. What do you want to see improved?\n
+       3. What do you want to see different?</string>
+    <string name="fragment_send_feedback_message_hint">I like this app! can you make it better by…</string>
+    <string name="fragment_send_feedback_welcome">We appreciate your opinion!</string>
+    <string name="activity_main_navigation_drawer_sublogo">ONE HUNDRED THIRTY-SEVEN YEARS OF SERVICE TO THE STUDENT</string>
+    <string name="activity_main_navigation_drawer_logo">THE INDEX</string>
 
 
 </resources>

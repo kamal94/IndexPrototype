@@ -1,25 +1,17 @@
 package indexprototype.com.kamal.indexprototype;
 
-import android.app.Activity;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ContactUs.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ContactUs#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ContactUs extends Fragment {
+public class SendFeedbackFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,19 +24,17 @@ public class ContactUs extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ContactUs.
+     * @return A new instance of fragment SendFeedbackFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ContactUs newInstance(String param1, String param2) {
-        ContactUs fragment = new ContactUs();
+    public static SendFeedbackFragment newInstance(String param1, String param2) {
+        SendFeedbackFragment fragment = new SendFeedbackFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -52,7 +42,7 @@ public class ContactUs extends Fragment {
         return fragment;
     }
 
-    public ContactUs() {
+    public SendFeedbackFragment() {
         // Required empty public constructor
     }
 
@@ -70,54 +60,27 @@ public class ContactUs extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_contact_us, container, false);
+
+        final EditText mFeedBackMessage = (EditText) v.findViewById(R.id.contact_us_message);
+
         sendMessageButton = (Button) v.findViewById(R.id.contact_us_send_button);
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Message Sent!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                String[] emails = new String[1];
+                emails[0] = EMAIL_ADDRESS_TO_CONTACT;
+                intent.putExtra(Intent.EXTRA_EMAIL, emails);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for The Index App");
+                intent.putExtra(Intent.EXTRA_TEXT, "Dear Index,\n\n" + mFeedBackMessage.getText() + "\n \nThank you!");
+                getActivity().startActivity(intent);
+                Toast.makeText(getActivity(), "Press send to help us with your awesome feedback!", Toast.LENGTH_SHORT).show();
             }
         });
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
-
+    private final String EMAIL_ADDRESS_TO_CONTACT = "kamal@kamalaldin.com";
 }

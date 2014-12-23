@@ -64,7 +64,7 @@ public class DataFetcher {
                     break;
                 case 5: section = StoriesBank.BUZZKILL;
                     url = StoriesBank.BUZZKILL_URL;
-                    Log.d("DataFetcher", "Buzkill reached on Case operator");
+                    Log.d("DataFetcher", "Buzzkill reached on Case operator");
                     break;
                 default:
                     Log.d("DataFetcher", "Defaulted on Case statement operation!!!");

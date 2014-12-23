@@ -2,6 +2,6 @@
 <resources>
     <string-array name="navigation_drawer_string_array">
         <item>Home</item>
-        <item>Contact Us</item>
+        <item>Send Feedback</item>
     </string-array>
 </resources>

@@ -1,7 +1,6 @@
 package indexprototype.com.kamal.indexprototype;
 
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +23,7 @@ import android.widget.Toast;
 import indexprototype.com.kamal.indexprototype.StorageManager.StorageManager;
 
 
-public class MainActivity extends ActionBarActivity implements ContactUs.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener{
+public class MainActivity extends ActionBarActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -60,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         //Sets the drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_atctivity_drawer_layout);
         mDrawerListView = (ListView) findViewById(R.id.main_activity_drawer_listview);
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation_drawer_string_array)){
+        mDrawerListView.setAdapter(new ArrayAdapter<String>(this, R.layout.navigation_drawer_list_view_item, getResources().getStringArray(R.array.navigation_drawer_string_array)){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View choiceView = getLayoutInflater().inflate(R.layout.navigation_drawer_list_view_item, parent, false);
@@ -86,13 +85,13 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                setTitle("The Index");
+//                setTitle("The Index");
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setTitle("Options");
+//                setTitle("Options");
             }
         };
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
@@ -117,15 +116,17 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml..
 //        int id = item.getItemId();
+
+        //Settings and Remove button are not implemented at the moment.
         switch(item.getItemId()){
-            case R.id.action_bar_settings:
-                actionBarSettingsClicked();
-                break;
+//            case R.id.action_bar_settings:
+//                actionBarSettingsClicked();
+//                break;
             case R.id.action_bar_refresh_feed:
                 actionBarRefreshClicked();
                 break;
-            case R.id.action_bar_remove_feed:
-                actionBarRemoveClicked();
+//            case R.id.action_bar_remove_feed:
+//                actionBarRemoveClicked();
             default:
                 return true;
         }
@@ -151,6 +152,7 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
      * on the main activity
      */
     private void actionBarRefreshClicked(){
+        Toast.makeText(this, "Refresh Button Click\nTry swiping down for fancy animation!", Toast.LENGTH_SHORT).show();
         homeFragment.refreshStories();
     }
 
@@ -158,12 +160,8 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
      * A method that deletes all entries in the feed
      */
     private void actionBarRemoveClicked(){
-        StoriesBank.clear();
+        Toast.makeText(this, "This button does nothing for now :(", Toast.LENGTH_SHORT).show();
         homeFragment.refreshStories();
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
     }
 
     @Override
@@ -195,25 +193,20 @@ public class MainActivity extends ActionBarActivity implements ContactUs.OnFragm
 
 
         public void homeChosen(){
-//            mFragmentManager.beginTransaction()
-//                    .replace(R.id.fragment_container, homeFragment)
-//                    .commit();
             mFragmentManager.popBackStack();
-            getSupportActionBar().setTitle("The Index");
+            Log.d("MainActivity", "BackStack popped");
             mDrawerLayout.closeDrawers();
         }
 
         public void contactUsChoosen(){
-
             FragmentManager fragmentManager = getSupportFragmentManager();
-            android.support.v4.app.Fragment fragment = new ContactUs();
+            android.support.v4.app.Fragment fragment = new SendFeedbackFragment();
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, ContactUs.FRAGMENT_TAG)
+                    .replace(R.id.fragment_container, fragment, SendFeedbackFragment.FRAGMENT_TAG)
                     .addToBackStack(null)
                     .commit();
-            getSupportActionBar().setTitle("Contact Us");
             mDrawerLayout.closeDrawers();
-            Log.d("MainActivity", "Contact us fragment commited");
+            Log.d("MainActivity", "Contact us fragment committed");
         }
     }
 }
