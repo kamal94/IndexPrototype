@@ -39,16 +39,7 @@
                         android:textSize="16sp"
                         android:paddingBottom="4dp"/>
 
-                    TextView
-                        android:id="@+id/story_list_view_small_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/sample_story_byline"
-                        android:textSize="10sp"
-                        android:textColor="@color/secondary_text_color"/>
-
-                </LinearLayout>
+                    </LinearLayout>
 
     </LinearLayout>
 
