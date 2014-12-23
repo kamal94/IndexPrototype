@@ -1,5 +1,6 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -74,8 +75,13 @@ public class SendFeedbackFragment extends Fragment {
                 intent.putExtra(Intent.EXTRA_EMAIL, emails);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for The Index App");
                 intent.putExtra(Intent.EXTRA_TEXT, "Dear Index,\n\n" + mFeedBackMessage.getText() + "\n \nThank you!");
-                getActivity().startActivity(intent);
-                Toast.makeText(getActivity(), "Press send to help us with your awesome feedback!", Toast.LENGTH_SHORT).show();
+                try {
+                    getActivity().startActivity(intent);
+                    Toast.makeText(getActivity(), "Press send to help us with your awesome feedback!", Toast.LENGTH_SHORT).show();
+                    mFeedBackMessage.setText("");
+                } catch (ActivityNotFoundException e){
+                    Toast.makeText(getActivity(), "It seems that you do not have an email app installed. Please install one and try again", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

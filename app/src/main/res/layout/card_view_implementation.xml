@@ -26,7 +26,7 @@
             />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:weightSum="7"
             android:layout_alignTop="@id/story_list_view_image_view"
@@ -35,10 +35,10 @@
             <TextView
                 android:id="@+id/story_list_view_large_text_view"
                 android:layout_width="wrap_content"
-                android:layout_height="10dp"
+                android:layout_height="0dp"
                 android:text="Kalamazoo Guitar Shop Expands Repair Options in Kalamazoo"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#af000000"
+                android:textColor="@color/primary_text_color"
                 android:textSize="16sp"
                 android:paddingLeft="3dp"
                 android:layout_weight="4"/>
@@ -50,7 +50,7 @@
                 android:layout_height="5dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="The Kalamazoo Guitar Shop (KGS) is a new guitar repair and building shop along the Kalamazoo Mall. With a corridor of guitars displayed on walls and luthier instruments spread on tables, it functions as half museum and half repair shop.  Co-owners Ry Charters and Jay Cavan opened the store on October 3 during Art Hop in hopes to continue Kalamazoo’s long tradition of music and guitar making.  Charters is a professional luthier devoting his time fully to KGS, and Cavan is a musician, guitar manufacturer, part time history teacher, and founder of the yearly Fretboard Festival. The two met more than 10 years ago at Heritage Guitar, the local guitar manufacturing company where Cavan still works and that took over the Gibson Guitar Co. factory when the famous guitar company moved to Nashville.  The vision came to Charters 6 months ago when he decided to move back from Seattle and "
-                android:textColor="#917c7c7c"
+                android:textColor="@color/secondary_text_color"
                 android:textSize="14sp"
                 android:layout_weight="3"/>
         </LinearLayout>
