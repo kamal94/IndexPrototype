@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.pkmmte.view.CircularImageView;
 
 import java.util.UUID;
 
@@ -36,30 +39,48 @@ import indexprototype.com.kamal.indexprototype.StoryReaderActivity;
 public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecyclerViewAdapter.ViewHolder> {
 
     //private instance fields
-    private Context mContext;                   //the context of the activity that calls/creates the adapter
+    private Context mContext;
     private String mSection;
+    private int mViewMode;
+
     /**
-     * simple constructor that
-     *
-     * @param context   The context of the activity that created the adapter
+     * A constructor that initializes the StoryRecyclerViewAdapter.
+     * @param context   The context of the activity.
+     * @param section   The section of the index for that specific list
+     *                  (used to get the count of the list).
+     * @param viewMode  The viewMode desired to display the Views. Choose from the
+     *                  StoryRecyclerViewAdapter public VIEW_MODE list.
      */
-    public StoryRecyclerViewAdapter(Context context, String section) {
+    public StoryRecyclerViewAdapter(Context context, String section, int viewMode) {
         mContext = context;
         mSection = section;
+        mViewMode = viewMode;
     }
 
     /**
      *Creates a <Code>ViewHolder</Code> that holds a <Code>CardView</Code> and returns it.
      * @param viewGroup     The <Code>ViewGroup</Code> that will serve as the parent of the list
-     * @param i             <Code>Unknown</Code>
-     * @return  vh  The <Code>ViewHolder</Code> that holds a cardviews of the list
+     * @param i             The view type (different from mViewType) that is responsible for
+     *                      creating different view within the same list for different positions
+     *                      in the list. Could be used to create advertisements within the list.
+     * @return  vh          The <class>ViewHolder</class> that is returned by the Adapter. The type
+     *                      of ViewHolder depends on the mViewType that is entered in the constructor.
      */
     @Override
-    public StoryRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        CardView v = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_implementation, viewGroup, false);
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
-        ViewHolder vh = new ViewHolder(v, mContext);
-        return vh;
+
+        switch (mViewMode){
+            case(VIEW_MODE_CARD_VIEW):
+                CardView v1 = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_implementation, viewGroup, false);
+                return new ViewHolder(v1, mContext);
+            case(VIEW_MODE_LIST_VIEW):
+                LinearLayout v2 = (LinearLayout) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.story_list_view_item, viewGroup, false);
+                return new ViewHolder(v2, mContext);
+            default:
+                CardView vd = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view_implementation, viewGroup, false);
+                return new ViewHolder(vd, mContext);
+        }
     }
 
     /**
@@ -75,7 +96,8 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
     public void onBindViewHolder(StoryRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         Story story = StoriesBank.findByIndex(i, mSection);
         viewHolder.largeText.setText(story.getTitle());
-        viewHolder.byline.setText(story.getByline());
+        if(mViewMode==VIEW_MODE_CARD_VIEW)
+            viewHolder.byline.setText(story.getByline());
         if(story.getImageBitmap()!=null)
             viewHolder.image.setImageDrawable(new BitmapDrawable(mContext.getResources(),story.getImageBitmap()));
         else{
@@ -127,7 +149,6 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
             super(storyCardView);
 
             //Sets the textviews and creates an intent to launch a StoryReaderActivity if the cardview is clicked.
-            //STUB NEEDS TO ADD AN IMPLEMENTATION OF SETTING THE IMAGE.
             largeText = (TextView) storyCardView.findViewById(R.id.story_list_view_large_text_view);
             byline = (TextView) storyCardView.findViewById(R.id.story_list_view_small_text_view);
             image = (ImageView) storyCardView.findViewById(R.id.story_list_view_image_view);
@@ -146,5 +167,40 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
                 }
             });
         }
+
+        /**
+         * A <code>ViewHolder</code> constructor that sets a <Code>RelativeView</Code> to
+         * display story information. This constructor also employs an <Code>OnClickListener</Code>
+         * that listens to clicks on the <Code>CardView</Code>.
+         *
+         * @param storyListView A <Code>CardView</Code> that represents information of a story
+         * @param context       Context of the activity that called the <Code>StoryRecyclerViewAdapter</Code>.
+         *                      It is used to create and launch an intent for when the onClickListener is called.
+         */
+        public ViewHolder(LinearLayout storyListView, final Context context) {
+            super(storyListView);
+
+            //Sets the textviews and creates an intent to launch a StoryReaderActivity if the cardview is clicked.
+            largeText = (TextView) storyListView.findViewById(R.id.story_list_view_large_text_view);
+//            byline = (TextView) storyListView.findViewById(R.id.story_list_view_small_text_view);
+            image = (CircularImageView) storyListView.findViewById(R.id.story_list_view_image_view);
+            intent = new Intent(context, StoryReaderActivity.class);
+
+            //sets an OnClickListener for the cardview to handle clicks.
+            storyListView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, StoryReaderActivity.class);
+                    intent.putExtra("STORY_ID", id);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity) context, image, StoryReaderActivity.TRANSITION_IMAGE_NAME);
+                    ActivityCompat.startActivity((Activity) context , intent,
+                            options.toBundle());
+                }
+            });
+        }
     }
+
+    public final static int VIEW_MODE_CARD_VIEW = 1;
+    public final static int VIEW_MODE_LIST_VIEW = 2;
 }

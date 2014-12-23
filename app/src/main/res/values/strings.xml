@@ -23,6 +23,8 @@
     <string name="fragment_send_feedback_welcome">We appreciate your opinion!</string>
     <string name="activity_main_navigation_drawer_sublogo">ONE HUNDRED THIRTY-SEVEN YEARS OF SERVICE TO THE STUDENT</string>
     <string name="activity_main_navigation_drawer_logo">THE INDEX</string>
+    <string name="sample_story_title">Kalamazoo Guitar Shop Expands Repair Options in Kalamazoo</string>
+    <string name="sample_story_byline">Photo by Theo Cambert / Index By Kamal Kamalaldin The Kalamazoo Guitar Shop (KGS) is a</string>
 
 
 </resources>

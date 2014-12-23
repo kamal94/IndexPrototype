@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_height="match_parent"
-             android:layout_width="match_parent"
-    >
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <ImageView
-            android:layout_width="80dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:id="@+id/story_list_view_image_view"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:scaleType="fitXY"/>
+            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:weightSum="1">
 
-        <TextView
-            android:id="@+id/story_list_view_large_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/story_list_view_image_view"
-            android:layout_toEndOf="@id/story_list_view_image_view"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textColor="#ff000000"
-            android:textSize="17dp"
-            android:paddingLeft="3dp"/>
+            <com.pkmmte.view.CircularImageView
+                android:id="@+id/story_list_view_image_view"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:layout_marginStart="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"/>
 
-        <TextView
-            android:id="@+id/story_list_view_small_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:layout_below="@id/story_list_view_large_text_view"
-            android:layout_toRightOf="@id/story_list_view_image_view"
-            android:layout_toEndOf="@id/story_list_view_image_view"
-            android:layout_alignBottom="@id/story_list_view_image_view"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:paddingTop="2dp" />
-</RelativeLayout>
-</FrameLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/story_list_view_large_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="@string/sample_story_title"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="16sp"
+                        android:paddingBottom="4dp"/>
+
+                    TextView
+                        android:id="@+id/story_list_view_small_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="@string/sample_story_byline"
+                        android:textSize="10sp"
+                        android:textColor="@color/secondary_text_color"/>
+
+                </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/divider_color"/>-->
+
+</LinearLayout>

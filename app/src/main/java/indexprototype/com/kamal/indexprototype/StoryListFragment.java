@@ -70,7 +70,7 @@ public class StoryListFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        storyRecyclerViewAdapter = new StoryRecyclerViewAdapter(getActivity(), mSection);
+        storyRecyclerViewAdapter = new StoryRecyclerViewAdapter(getActivity(), mSection, StoryRecyclerViewAdapter.VIEW_MODE_LIST_VIEW);
         recyclerView.setAdapter(storyRecyclerViewAdapter);
         storyRecyclerViewAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
         });
