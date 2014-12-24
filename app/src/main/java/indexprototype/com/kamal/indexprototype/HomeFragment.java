@@ -29,14 +29,14 @@ import indexprototype.com.kamal.indexprototype.StorageManager.StorageManager;
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String FROM_WHERE = "fromwhere";
 
-    public static final String TAG = "HOME_FRAGMENT";
+    public static final String FRAGMENT_TAG = "HOME_FRAGMENT";
     public static final String BUNDLE_KEY = "HOME_FRAGMENT_BUNDLE_KEY";
+    public static final String INSTANCE_FROM_NAVIGATION_DRAWER = "isntancefromnavigationdrawer";
+    public static final String INSTANCE_FROM_ACTIVITY_CREATED = "instancefromactivitycreated";
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String whereFrom;
 
 
     private static SectionsAdapter mSectionsAdapter;
@@ -44,30 +44,53 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private StoriesSwipeToRefreshLayout swipeRefreshLayout;
     private SlidingTabLayout mSlidingTabLayout;
 
+    public static HomeFragment newInstance(String originLocation) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putString(FROM_WHERE, originLocation);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * If the fragment was instantiated from the navigation drawer, the fragment
+     * does not run a thread to download the articles and images again.
+     * @param savedInstanceState    The savedInstanceState of the fragment, if
+     *                              it has been created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            whereFrom = getArguments().getString(FROM_WHERE);
         }
 
-        StorageManager loadingManager = new StorageManager(getActivity().getApplicationContext());
-        loadingManager.loadStories();
+        //set the section adapter. The section adapter
+        //needs to be initialized in the onCreate method so that it can be
+        //maintained when the fragment is replaced.
+        mSectionsAdapter = new SectionsAdapter(getChildFragmentManager());
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if(networkInfo!= null && networkInfo.isConnected()) {
-            for (int i = 0; i < 6; i++) { new DownloadData().execute(i);}
-            for (int i = 0; i < 6; i++) {new DownloadStoryImages().execute(i);}
-        } else {
-            Toast.makeText(getActivity(), "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
+
+        if(whereFrom==null || !whereFrom.equals(INSTANCE_FROM_NAVIGATION_DRAWER)) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                for (int i = 0; i < 6; i++) {
+                    new DownloadData().execute(i);
+                }
+                for (int i = 0; i < 6; i++) {
+                    new DownloadStoryImages().execute(i);
+                }
+            } else {
+                Toast.makeText(getActivity(), "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
+            }
+            StorageManager loadingManager = new StorageManager(getActivity().getApplicationContext());
+            loadingManager.loadStories();
         }
-
     }
 
     @Override
@@ -77,8 +100,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
 
-        //Sets the ViewPager and the Adapter for it.
-        mSectionsAdapter = new SectionsAdapter(getChildFragmentManager());
+        //Sets the ViewPager and the Adapter for it. The section adapter
+        //needs to be initialized in the onCreate method so that it can be
+        //maintained when the fragment is replaced.
+
         mViewPager = (ViewPager) v.findViewById(R.id.home_fragment_view_pager);
         mViewPager.setAdapter(mSectionsAdapter);
         //This listener implements an important override that prevents the
@@ -173,6 +198,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            Log.d("HomeFragment", "Image download for list "+ runningThread + " is complete");
             mSectionsAdapter.notifyDataSetChanged();
             mSectionsAdapter.refreshFragment(runningThread);
         }

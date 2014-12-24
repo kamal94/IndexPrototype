@@ -1,7 +1,6 @@
 package indexprototype.com.kamal.indexprototype;
 
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -41,20 +40,18 @@ public class MainActivity extends ActionBarActivity {
         getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
 
         //Sets the beginning fragment
-        homeFragment =  new HomeFragment();
-        mFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, homeFragment, HomeFragment.TAG)
-                .commit();
-
+        if(mFragmentManager.findFragmentById(R.id.fragment_container)==null){
+            homeFragment =  HomeFragment.newInstance(HomeFragment.INSTANCE_FROM_ACTIVITY_CREATED);
+            mFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, homeFragment, HomeFragment.FRAGMENT_TAG)
+                    .commit();
+        }
 
         //Sets the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if(toolbar!=null){setSupportActionBar(toolbar);}
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary_color)));
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            getWindow().setStatusBarColor(getResources().getColor(R.color.primary_color_dark));
-        }
 
         //Sets the drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_atctivity_drawer_layout);
@@ -172,7 +169,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Created by Kamal on 12/13/2014.
+     * A simple OnClickListener implementation for the list of items in the Navigation Drawer.
      */
     public class NavigationDrawerListener implements AdapterView.OnItemClickListener {
 
@@ -182,31 +179,32 @@ public class MainActivity extends ActionBarActivity {
             switch(position){
                 case(0):
                     homeChosen();
-                    Log.d("MainActivity", "Home fragment inflation called");
+                    Log.d("MainActivity", "HomeFragment fragment inflation called");
                     break;
                 case(1):
-                    contactUsChoosen();
-                    Log.d("MainActivity", "ContactUS fragment inflation called");
+                    contactUsChosen();
+                    Log.d("MainActivity", "SendFeedbackFragment fragment inflation called");
                     break;
             }
         }
 
 
         public void homeChosen(){
-            mFragmentManager.popBackStack();
-            Log.d("MainActivity", "BackStack popped");
             mDrawerLayout.closeDrawers();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, HomeFragment.newInstance(HomeFragment.INSTANCE_FROM_NAVIGATION_DRAWER), HomeFragment.FRAGMENT_TAG)
+                    .commit();
+            Log.d("MainActivity", "HomeFragment fragment committed");
         }
 
-        public void contactUsChoosen(){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            android.support.v4.app.Fragment fragment = new SendFeedbackFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment, SendFeedbackFragment.FRAGMENT_TAG)
+        public void contactUsChosen(){
+            android.support.v4.app.Fragment sendFeedbackFragment = new SendFeedbackFragment();
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, sendFeedbackFragment, SendFeedbackFragment.FRAGMENT_TAG)
                     .addToBackStack(null)
                     .commit();
             mDrawerLayout.closeDrawers();
-            Log.d("MainActivity", "Contact us fragment committed");
+            Log.d("MainActivity", "SendFeedbackFragment fragment committed");
         }
     }
 }
