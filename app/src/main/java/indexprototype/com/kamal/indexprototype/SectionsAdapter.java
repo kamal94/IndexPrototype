@@ -10,6 +10,7 @@ import android.view.ViewGroup;
  *
  * POSSIBLE ERRORS:
  * http://stackoverflow.com/questions/14035090/how-to-get-existing-fragments-when-using-fragmentpageradapter/23843743#23843743
+ * http://stackoverflow.com/questions/17629463/fragmentpageradapter-how-to-handle-orientation-changes
  *
  * Created by Kamal on 12/5/2014.
  */
