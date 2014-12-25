@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
-import android.util.SparseArray;
+import android.view.ViewGroup;
 
 /**
  *
@@ -15,8 +15,8 @@ import android.util.SparseArray;
  */
 public class SectionsAdapter extends FragmentPagerAdapter {
 
-    private SparseArray<StoryListFragment> mSparseArray
-            = new SparseArray<StoryListFragment>();
+    private StoryListFragment[] fragmentsArray
+            = new StoryListFragment[getCount()];
 
     public SectionsAdapter(FragmentManager fm) {
         super(fm);
@@ -26,8 +26,8 @@ public class SectionsAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if(mSparseArray.get(position)!=null)
-            return mSparseArray.get(position);
+        if(fragmentsArray[position]!=null)
+            return fragmentsArray[position];
         StoryListFragment storyListFragment = null;
         switch(position){
             case(0):
@@ -50,7 +50,7 @@ public class SectionsAdapter extends FragmentPagerAdapter {
                 break;
         }
 
-        mSparseArray.put(position, storyListFragment);
+        fragmentsArray[position] =  storyListFragment;
         return storyListFragment;
     }
 
@@ -85,7 +85,14 @@ public class SectionsAdapter extends FragmentPagerAdapter {
      * @return
      */
     public StoryListFragment getFragment(int fragmentPosition){
-        StoryListFragment fragment = mSparseArray.get(fragmentPosition);
+        StoryListFragment fragment = fragmentsArray[fragmentPosition];
+        return fragment;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        StoryListFragment fragment = (StoryListFragment) super.instantiateItem(container, position);
+        fragmentsArray[position] = fragment;
         return fragment;
     }
 
@@ -104,7 +111,4 @@ public class SectionsAdapter extends FragmentPagerAdapter {
             Log.d("SectionsAdapter", " List " + position  + " was found to be null.");
         }
     }
-
-
-
 }

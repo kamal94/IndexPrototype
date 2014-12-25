@@ -1,10 +1,12 @@
 package indexprototype.com.kamal.indexprototype;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +57,7 @@ public class StoryListFragment extends Fragment {
         if (getArguments() != null) {
             mSection = getArguments().getString(ARG_SECTION);
         }
-
-
+//        setRetainInstance(true);
     }
 
     @Override
@@ -86,4 +87,15 @@ public class StoryListFragment extends Fragment {
         return recyclerView;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("StoryListFragment", "onDetach() called for list " + mSection);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.d("StoryListFragment", "onAttach() called for list " + mSection);
+    }
 }
