@@ -1,6 +1,9 @@
 package indexprototype.com.kamal.indexprototype;
 
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -53,24 +56,27 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         if (mFragmentManager == null){
             mFragmentManager = getSupportFragmentManager();
         }
+
+        //loads the stories at start
+        StorageManager loadingManager = new StorageManager(getApplicationContext());
+        loadingManager.loadStories();
+
         //if activity is saved, then get back the homeFragment
         if(savedInstanceState!=null) {
 
         } else {
-//            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//            if (networkInfo != null && networkInfo.isConnected()) {
-//                for (int i = 0; i < 6; i++) {
-//                    new DownloadData().execute(i);
-//                }
-//                for (int i = 0; i < 6; i++) {
-//                    new DownloadStoryImages().execute(i);
-//                }
-//            } else {
-//                Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
-//            }
-            StorageManager loadingManager = new StorageManager(getApplicationContext());
-            loadingManager.loadStories();
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                for (int i = 0; i < 6; i++) {
+                    new DownloadData().execute(i);
+                }
+                for (int i = 0; i < 6; i++) {
+                    new DownloadStoryImages().execute(i);
+                }
+            } else {
+                Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
+            }
         }
 
 

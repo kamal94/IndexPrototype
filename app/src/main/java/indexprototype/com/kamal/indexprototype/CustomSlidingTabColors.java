@@ -45,19 +45,19 @@ public class CustomSlidingTabColors implements SlidingTabLayout.TabColorizer {
     public int getDividerColor(int position) {
         switch (position){
             case(0):
-                return Color.BLACK;
+                return 0xFF5722;
             case(1):
-                return Color.BLACK;
+                return 0xFF5722;
             case(2):
-                return Color.BLACK;
+                return 0xFF5722;
             case(3):
-                return Color.BLACK;
+                return 0xFF5722;
             case(4):
-                return Color.BLACK;
+                return 0xFF5722;
             case(5):
-                return Color.BLACK;
+                return 0xFF5722;
             default:
-                return Color.GRAY;
+                return 0xFF5722;
         }
     }
 }

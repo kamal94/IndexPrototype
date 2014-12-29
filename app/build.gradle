@@ -8,8 +8,8 @@ android {
         applicationId "indexprototype.com.kamal.indexprototype"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 8
-        versionName "0.0.006"
+        versionCode 10
+        versionName "0.0.008"
     }
     /*
 
