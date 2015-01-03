@@ -57,8 +57,7 @@ public class StoryListFragment extends Fragment {
         if (getArguments() != null) {
             mSection = getArguments().getString(ARG_SECTION);
         }
-//        setRetainInstance(true);
-    }
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
