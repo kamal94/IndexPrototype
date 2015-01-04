@@ -71,9 +71,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 for (int i = 0; i < 6; i++) {
                     new DownloadData().execute(i);
                 }
-                for (int i = 0; i < 6; i++) {
-                    new DownloadStoryImages().execute(i);
-                }
+                new DownloadStoryImages().execute(0);
+
             } else {
                 Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
             }

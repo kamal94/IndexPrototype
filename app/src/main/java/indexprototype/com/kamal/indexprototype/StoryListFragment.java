@@ -30,7 +30,6 @@ public class StoryListFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
 
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
