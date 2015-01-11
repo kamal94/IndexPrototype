@@ -8,8 +8,8 @@ android {
         applicationId "indexprototype.com.kamal.indexprototype"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 10
-        versionName "0.0.008"
+        versionCode 11
+        versionName "0.0.009"
     }
     /*
 
@@ -35,4 +35,5 @@ dependencies {
         exclude module: 'junit'
     }
     compile 'com.pkmmte.view:circularimageview:1.1'
+    compile 'com.mcxiaoke.volley:library:1.0.+'
 }

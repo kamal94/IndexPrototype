@@ -47,7 +47,7 @@ public class StoryReaderActivity extends ActionBarActivity {
         title.setText(story.getTitle());
 
         section = (TextView) findViewById(R.id.story_list_view_story_section);
-        section.setText(story.getSection());
+        section.setText(story.getSection().toString());
 
         author = (TextView) findViewById(R.id.story_list_view_story_author);
         author.setText(story.getAuthor());

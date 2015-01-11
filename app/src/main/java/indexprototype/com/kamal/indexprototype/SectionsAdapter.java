@@ -32,22 +32,22 @@ public class SectionsAdapter extends FragmentPagerAdapter {
         StoryListFragment storyListFragment = null;
         switch(position){
             case(0):
-                storyListFragment = StoryListFragment.newInstance(StoriesBank.NEWS);
+                storyListFragment = StoryListFragment.newInstance(StoriesBank.Section.NEWS);
                 break;
             case(1):
-                storyListFragment = StoryListFragment.newInstance(StoriesBank.FEATURES);
+                storyListFragment = StoryListFragment.newInstance(StoriesBank.Section.FEATURES);
                 break;
             case(2):
-                 storyListFragment=  StoryListFragment.newInstance(StoriesBank.ARTS);
+                 storyListFragment=  StoryListFragment.newInstance(StoriesBank.Section.ARTS);
                 break;
             case(3):
-                 storyListFragment = StoryListFragment.newInstance(StoriesBank.OPINIONS);
+                 storyListFragment = StoryListFragment.newInstance(StoriesBank.Section.OPINIONS);
                 break;
             case(4):
-                 storyListFragment = StoryListFragment.newInstance(StoriesBank.SPORTS);
+                 storyListFragment = StoryListFragment.newInstance(StoriesBank.Section.SPORTS);
                 break;
             case(5):
-                 storyListFragment =  StoryListFragment.newInstance(StoriesBank.BUZZKILL);
+                 storyListFragment =  StoryListFragment.newInstance(StoriesBank.Section.BUZZKILL);
                 break;
         }
 

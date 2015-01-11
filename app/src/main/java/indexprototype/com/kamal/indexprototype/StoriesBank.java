@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
 /**
  * A singleton class that stores that stories that are fetched by the application and
  * manages their sorting and access.
@@ -72,35 +71,27 @@ public class StoriesBank {
         if(stories.add(story))
             progress++;
         switch (story.getSection()){
-            case(StoriesBank.NEWS):
+            case NEWS:
                 sNewsStories.add(story);
                 progress++;
                 break;
-            case(StoriesBank.FEATURES):
+            case FEATURES:
                 sFeaturesStories.add(story);
                 progress++;
                 break;
-            case(StoriesBank.ARTS):
+            case ARTS:
                 sArtsStories.add(story);
                 progress++;
                 break;
-            case(StoriesBank.ARTS_SHORT):
-                sArtsStories.add(story);
-                progress++;
-                break;
-            case(StoriesBank.ARRTS_FULL):
-                sArtsStories.add(story);
-                progress++;
-                break;
-            case(StoriesBank.OPINIONS):
+            case OPINIONS:
                 sOpinionsStories.add(story);
                 progress++;
                 break;
-            case(StoriesBank.SPORTS):
+            case SPORTS:
                 sSportsStories.add(story);
                 progress++;
                 break;
-            case(StoriesBank.BUZZKILL):
+            case BUZZKILL:
                 sBuzzKillStories.add(story);
                 progress++;
                 break;
@@ -181,27 +172,8 @@ public class StoriesBank {
      * @return  story   The story that occupies the List index in the section.
      *                  If no such story is found, null is returned.
      */
-    public static Story findByIndex(int index, String section) {
-        switch (section){
-            case(StoriesBank.NEWS):
-                return sNewsStories.get(index);
-            case(StoriesBank.FEATURES):
-                return sFeaturesStories.get(index);
-            case(StoriesBank.ARTS):
-                return sArtsStories.get(index);
-            case(StoriesBank.ARTS_SHORT):
-                return sArtsStories.get(index);
-            case(StoriesBank.ARRTS_FULL):
-                return sArtsStories.get(index);
-            case(StoriesBank.OPINIONS):
-                return sOpinionsStories.get(index);
-            case(StoriesBank.SPORTS):
-                return sSportsStories.get(index);
-            case(StoriesBank.BUZZKILL):
-                return sBuzzKillStories.get(index);
-            default:
-                return null;
-        }
+    public static Story findByIndex(int index, Section section) {
+        return getSection(section).get(index);
     }
 
     /**
@@ -224,7 +196,7 @@ public class StoriesBank {
      */
     public static void printStories(){
         for(Story story: stories){
-                System.out.println(story.toString());
+            System.out.println(story.toString());
         }
     }
 
@@ -262,27 +234,31 @@ public class StoriesBank {
     public static final String BUZZKILL_URL = "http://www.thekzooindex.com/category/buzzkill/";
     public static final int NUM_OF_SECTIONS = sections.size();
 
+    public enum Section{ NEWS, FEATURES, ARTS, OPINIONS, SPORTS, BUZZKILL }
+
+
     /**
      * Returns the stories in the desired section.
-     * @param section   The section whose stories are wanted.
+     * @param section   The enum of the desired section..
      *                  The string must be one of the constants in <class>StoriesBank</class>
-     *                  (eg. StoriesBank.NEWS for the List of news).
+     *                  (eg. StoriesBank.Section.NEWS for the List of news).
      * @return  List    The list of stories in the desired section. If the entered value
      *                  is not one of the acceptable constants, null is returned.
      */
-    public static List getSection(String section) {
+    public static List<Story> getSection(Section section) {
+
         switch(section){
-            case(NEWS):
+            case NEWS:
                 return sNewsStories;
-            case(FEATURES):
+            case FEATURES:
                 return sFeaturesStories;
-            case(ARTS):
+            case ARTS:
                 return sArtsStories;
-            case(OPINIONS):
+            case OPINIONS:
                 return sOpinionsStories;
-            case(SPORTS):
+            case SPORTS:
                 return sSportsStories;
-            case(BUZZKILL):
+            case BUZZKILL:
                 return sBuzzKillStories;
             default:
                 return null;

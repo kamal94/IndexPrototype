@@ -15,6 +15,7 @@ import java.util.UUID;
 import indexprototype.com.kamal.indexprototype.StoriesBank;
 import indexprototype.com.kamal.indexprototype.Story;
 
+
 /**
  * A class that creates a story by accessing its link.
  *
@@ -25,12 +26,12 @@ public class StoryBuilder {
 
 
     //private instance fields
-	private String mURL;  //The url of the Story website
-	private String mStoryContent = ""; //The contents of the story
-	private String mAuthorName = ""; //The name of the author
-	private String mTitle = "";  //The title of the story
-	private Document doc = null;    //The representation of the story website for Jsoup
-	private String imageURL = null; //The URL string of the story's image
+    private String mURL;  //The url of the Story website
+    private String mStoryContent = ""; //The contents of the story
+    private String mAuthorName = ""; //The name of the author
+    private String mTitle = "";  //The title of the story
+    private Document doc = null;    //The representation of the story website for Jsoup
+    private String imageURL = null; //The URL string of the story's image
     private String mByline = null;  //The byline of the story as fetched from the gits.
 
     /**
@@ -42,10 +43,10 @@ public class StoryBuilder {
      *                  false if an error was encountered while adding the story. If
      *                  the passed Element is <code>null</code>, false is returned.
      */
-    public boolean getStoryGist(Element element, String section){
+    public Story getStoryGist(Element element, StoriesBank.Section section){
 
         if(element==null)
-            return false;
+            return null;
 
         mURL = URLTokenizer.getURL(element.toString());
         Elements title = element.getElementsByAttributeValue("class", "loop-title");
@@ -62,10 +63,10 @@ public class StoryBuilder {
         }
 //
 //        Log.d("StoryBuilder", "Story Gist: \n" + "link: " + mURL + "\ntitle: " + mTitle + "\nimageURL : " + imageURL);
+        Story story = new Story(mURL, null, mTitle, null, mByline, imageURL, section);
+        StoriesBank.addStory(story);
 
-        StoriesBank.addStory(new Story(mURL, null, mTitle, null, mByline, imageURL, section));
-
-        return true;
+        return story;
     }
     /**
      * Reads a story from the website by fetching the story's URL
@@ -73,12 +74,12 @@ public class StoryBuilder {
      * @return boolean True if the story was read successfully. False if any errors
      * were encountered.
      */
-	public boolean readStory(UUID uuid){
+    public boolean readStory(UUID uuid){
         //reads the url as a Jsoup Document
-		mURL = StoriesBank.findById(uuid).getStoryURL();
-		try {
-			 doc =   Jsoup.connect(mURL).get();
-		} catch (SocketTimeoutException e){
+        mURL = StoriesBank.findById(uuid).getStoryURL();
+        try {
+            doc =   Jsoup.connect(mURL).get();
+        } catch (SocketTimeoutException e){
             Log.e("StoryBuilder", "Connection timed out while accessing " + mURL + " \n Trying again...!");
             try{
                 doc = Jsoup.connect(mURL).get();
@@ -96,41 +97,41 @@ public class StoryBuilder {
                 e.printStackTrace();
             }
         } catch (IOException e) {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
 
         //gets elements according to their classes' attributes
-		Elements storyContentElements = doc.getElementsByAttributeValue("class", "entry clearfix");
-		Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
-		ArrayList<Elements> innerElementsArray = new ArrayList<Elements>(); //creats an arraylist that will be filled with inner elements of mStoryContent paragraphs
+        Elements storyContentElements = doc.getElementsByAttributeValue("class", "entry clearfix");
+        Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
+        ArrayList<Elements> innerElementsArray = new ArrayList<Elements>(); //creats an arraylist that will be filled with inner elements of mStoryContent paragraphs
 
         //adds inner elements that have the story content in the arraylist
-		for(Element element: storyContentElements){
-			Elements innerElements = element.children();
-			innerElementsArray.add(innerElements);
-		}
+        for(Element element: storyContentElements){
+            Elements innerElements = element.children();
+            innerElementsArray.add(innerElements);
+        }
 
         //searches for the author and sets mAuthorName to it. If no author name is found, mAuthorName is set to null
-		for(Element element: author){
-			String authorTag = element.toString();
-			int start = authorTag.indexOf("By");
-			int end = authorTag.indexOf("<", start);
-			if(start!=-1){
-				mAuthorName = authorTag.substring(start + 3, end);
-			}
-		}
+        for(Element element: author){
+            String authorTag = element.toString();
+            int start = authorTag.indexOf("By");
+            int end = authorTag.indexOf("<", start);
+            if(start!=-1){
+                mAuthorName = authorTag.substring(start + 3, end);
+            }
+        }
 
         //adds the paragraphs to mStoryContent, and searches for an image URL in the story.
-		for(Elements elementsCollection: innerElementsArray){
-			for(Element element: elementsCollection){
-				if(element.hasText())
-					mStoryContent += element.text() + "\n" + "\t";
-			}
+        for(Elements elementsCollection: innerElementsArray){
+            for(Element element: elementsCollection){
+                if(element.hasText())
+                    mStoryContent += element.text() + "\n" + "\t";
+            }
             Log.d("StoryBuilder", "Content read: " + mStoryContent);
-		}
+        }
 
         StoriesBank.findById(uuid).setContent(mStoryContent);
         StoriesBank.findById(uuid).setAuthor(mAuthorName);
         return true;
-	}
+    }
 }

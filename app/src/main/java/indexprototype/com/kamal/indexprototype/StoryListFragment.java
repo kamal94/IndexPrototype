@@ -25,7 +25,7 @@ public class StoryListFragment extends Fragment {
     private static final String ARG_SECTION = "mSection";
 
     // TODO: Rename and change types of parameters
-    private String mSection;
+    private StoriesBank.Section mSection;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private StoryRecyclerViewAdapter storyRecyclerViewAdapter;
@@ -38,10 +38,10 @@ public class StoryListFragment extends Fragment {
      * @return A new instance of fragment StoryListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StoryListFragment newInstance(String section) {
+    public static StoryListFragment newInstance(StoriesBank.Section section) {
         StoryListFragment fragment = new StoryListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_SECTION, section);
+        args.putSerializable(ARG_SECTION, section);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +54,7 @@ public class StoryListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mSection = getArguments().getString(ARG_SECTION);
+            mSection = (StoriesBank.Section) getArguments().getSerializable(ARG_SECTION);
         }
 }
 

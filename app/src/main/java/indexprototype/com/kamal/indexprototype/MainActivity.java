@@ -30,11 +30,13 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
+import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.Communicator;
 import indexprototype.com.kamal.indexprototype.OnlineStoriesReader.DataFetcher;
 import indexprototype.com.kamal.indexprototype.StorageManager.StorageManager;
 
 
-public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener,
+        Communicator{
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
@@ -68,11 +70,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
-                for (int i = 0; i < 6; i++) {
-                    new DownloadData().execute(i);
-                }
-                new DownloadStoryImages().execute(0);
 
+                DataFetcher dataFetcher = new DataFetcher(this);
+                dataFetcher.runAll();
             } else {
                 Toast.makeText(this, "No network detected. Please connect to the internet and try again.", Toast.LENGTH_SHORT).show();
             }
@@ -257,6 +257,19 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         Log.d("MainActivity", "onSaveInstanceState() called");
     }
 
+    @Override
+    public void storyRead(Story story) {
+        refreshStories();
+        Log.d("DataFetching", "Story read in Main Activity \n" + story.getTitle());
+    }
+
+    @Override
+    public void sectionGistsDownloaded(StoriesBank.Section section) {
+        new DownloadStoryImages().execute(section);
+        refreshStories();
+        Log.d("DataFetching", "Image Downloader Thread started execution on section " + section);
+    }
+
 
     /**
      * A simple OnClickListener implementation for the list of items in the Navigation Drawer.
@@ -305,52 +318,30 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         }
     }
     /**
-     * A class that runs the download for the stories from the internet on a separate thread.
-     */
-    private class DownloadData extends AsyncTask<Integer, Integer, Boolean> {
-
-        private int runningThread;
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            runningThread = params[0];
-            return DataFetcher.run(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                requestDataRefresh();
-                Log.d("MainActivity", "running thread: " + runningThread);
-            }
-        }
-    }
-
-
-    /**
      * A class that downloads images of stories.
      */
-    private class DownloadStoryImages extends AsyncTask<Integer, Integer, Boolean>{
+    private class DownloadStoryImages extends AsyncTask<StoriesBank.Section, Integer, Boolean>{
 
-        private int runningThread;
+        private StoriesBank.Section runningThread;
         @Override
-        protected Boolean doInBackground(Integer... params) {
+        protected Boolean doInBackground(StoriesBank.Section... params) {
 
             runningThread = params[0];
-            for(Story story: StoriesBank.getStories()){
+            for(Story story: StoriesBank.getSection(runningThread)){
                 if(!story.getImageURL().equals(Story.DEFAULT_IMAGE_URL))
                     try {
                         story.setImageBitmap(Picasso.with(getApplicationContext()).load(story.getImageURL()).get());
                     } catch (IOException e) {
                         e.printStackTrace();
+                        return false;
                     }
             }
-            return null;
+            return true;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            Log.d("MainActivity", "Image download for list "+ runningThread + " is complete");
-            requestDataRefresh();
+            Log.d("DataFetching", "Image download for list "+ runningThread + " is complete");
         }
     }
 }

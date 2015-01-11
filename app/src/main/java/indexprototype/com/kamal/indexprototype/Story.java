@@ -1,6 +1,7 @@
 package indexprototype.com.kamal.indexprototype;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,10 +34,10 @@ public class Story {
     private String author;
     private String mImageURL;
     private Bitmap mImageBitmap;
-    private String mSection;
+    private StoriesBank.Section mSection;
     private String mByline;
 
-    public Story(String storyURL, String Author, String Title, String Content, String byline, String imageURL, String section){
+    public Story(String storyURL, String Author, String Title, String Content, String byline, String imageURL, StoriesBank.Section section){
         if(storyURL!=null)
             mStoryURL = storyURL;
         else
@@ -93,7 +94,7 @@ public class Story {
      * Rerturns the section the story belongs to.
      * @return  section The section that the story belongs to.
      */
-    public String getSection() {
+    public StoriesBank.Section getSection() {
         return mSection;
     }
 
@@ -178,7 +179,7 @@ public class Story {
      */
     public Bitmap getImageBitmap(){
         if(this.mImageURL.equals(DEFAULT_IMAGE_URL))
-           return null;
+            return null;
         return mImageBitmap;
     }
 
@@ -224,6 +225,7 @@ public class Story {
         jsonObject.put(JSON_ID, getID());
         jsonObject.put(JSON_IMAGE_URL, getImageURL());
         jsonObject.put(JSON_SECTION, getSection());
+        Log.d("Story", "Section: " + getSection());
 
         return jsonObject;
     }
@@ -232,7 +234,7 @@ public class Story {
      * Parses a <Class>JSONObject</Class> and returns a <Class>Story</Class>.
      * @param JSONStory A JSONObject that represents a Story.
      * @return  Story   The story parsed from the JSONObject
-     * @throws JSONException    If the JSONObject does not correctly represent a
+     * @throws org.json.JSONException    If the JSONObject does not correctly represent a
      * <Class>Story</Class>.
      */
     public static  Story getStory(JSONObject JSONStory) throws JSONException {
@@ -242,7 +244,7 @@ public class Story {
                 (String) JSONStory.get(Story.JSON_CONTENT),
                 (String) JSONStory.get(Story.JSON_BYLINE),
                 (String) JSONStory.get(Story.JSON_IMAGE_URL),
-                (String) JSONStory.get(Story.JSON_SECTION)
+                StoriesBank.Section.valueOf(JSONStory.getString(Story.JSON_SECTION))
         );
     }
 

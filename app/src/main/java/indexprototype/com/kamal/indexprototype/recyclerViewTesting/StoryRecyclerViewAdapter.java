@@ -40,7 +40,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
 
     //private instance fields
     private Context mContext;
-    private String mSection;
+    private StoriesBank.Section mSection;
     private int mViewMode;
 
     /**
@@ -51,7 +51,7 @@ public class StoryRecyclerViewAdapter extends RecyclerView.Adapter<StoryRecycler
      * @param viewMode  The viewMode desired to display the Views. Choose from the
      *                  StoryRecyclerViewAdapter public VIEW_MODE list.
      */
-    public StoryRecyclerViewAdapter(Context context, String section, int viewMode) {
+    public StoryRecyclerViewAdapter(Context context, StoriesBank.Section section, int viewMode) {
         mContext = context;
         mSection = section;
         mViewMode = viewMode;
