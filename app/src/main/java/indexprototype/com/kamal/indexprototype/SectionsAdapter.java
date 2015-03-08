@@ -108,7 +108,6 @@ public class SectionsAdapter extends FragmentPagerAdapter {
             getFragment(position).refreshList();
             Log.d("SectionsAdapter", "Refreshed list " + position);
         } else {
-
             Log.d("SectionsAdapter", " List " + position  + " was found to be null.");
         }
     }

@@ -102,7 +102,6 @@ public class StoryBuilder {
 
         //gets elements according to their classes' attributes
         Elements storyContentElements = doc.getElementsByAttributeValue("class", "entry clearfix");
-        Elements author = doc.getElementsByAttributeValue("style", "color: #000000;");
         ArrayList<Elements> innerElementsArray = new ArrayList<Elements>(); //creats an arraylist that will be filled with inner elements of mStoryContent paragraphs
 
         //adds inner elements that have the story content in the arraylist
@@ -111,14 +110,10 @@ public class StoryBuilder {
             innerElementsArray.add(innerElements);
         }
 
-        //searches for the author and sets mAuthorName to it. If no author name is found, mAuthorName is set to null
+        //Searches for and sets the author name from the document
+        Elements author = doc.getElementsByAttributeValue("style", "font-family: 'source-sans-pro', helvetica, sans-serif;");
         for(Element element: author){
-            String authorTag = element.toString();
-            int start = authorTag.indexOf("By");
-            int end = authorTag.indexOf("<", start);
-            if(start!=-1){
-                mAuthorName = authorTag.substring(start + 3, end);
-            }
+            mAuthorName = element.text();
         }
 
         //adds the paragraphs to mStoryContent, and searches for an image URL in the story.
@@ -127,7 +122,7 @@ public class StoryBuilder {
                 if(element.hasText())
                     mStoryContent += element.text() + "\n" + "\t";
             }
-            Log.d("StoryBuilder", "Content read: " + mStoryContent);
+            Log.d("StoryBuilder", "Content read: \nTitle: " + mTitle + "\nauthor: " + mAuthorName + "\nContent: " + mStoryContent);
         }
 
         StoriesBank.findById(uuid).setContent(mStoryContent);

@@ -174,6 +174,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     }
 
 
+    /**
+     * Refreshes the stories of the current section being viewed.
+     */
     public void refreshStories(){
         mSectionsAdapter.notifyDataSetChanged();
         mSectionsAdapter.refreshFragment(mViewPager.getCurrentItem());
@@ -201,10 +204,23 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Pops the backstack at the NavigateUp command.
+     * @return
+     */
     @Override
     public boolean onSupportNavigateUp() {
         mFragmentManager.popBackStack();
         return true;
+    }
+
+    /**
+     * A STUB method to indicate the clicking of the refresh button/icon
+     * on the main activity
+     */
+    private void actionBarRefreshClicked(){
+        Toast.makeText(this, "Refresh Button Click\nTry swiping down for fancy animation!", Toast.LENGTH_SHORT).show();
+        refreshStories();
     }
 
     @Override
@@ -222,26 +238,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.d("MainActivity", "onResume() called");
     }
-
-    /**
-     * Requests the HomeFragment to refresh its view and the stories within it.
-     */
-    public void requestDataRefresh(){
-        refreshStories();
-    }
-
-    /**
-     * A STUB method to indicate the clicking of the refresh button/icon
-     * on the main activity
-     */
-    private void actionBarRefreshClicked(){
-        Toast.makeText(this, "Refresh Button Click\nTry swiping down for fancy animation!", Toast.LENGTH_SHORT).show();
-        requestDataRefresh();
-    }
-
 
     @Override
     protected void onPause() {
@@ -317,6 +315,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             mDrawerLayout.closeDrawers();
         }
     }
+
+
+
     /**
      * A class that downloads images of stories.
      */
